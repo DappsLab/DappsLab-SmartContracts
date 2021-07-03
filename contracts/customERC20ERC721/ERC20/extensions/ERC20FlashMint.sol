@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/IERC3156.sol";
+import "../../interfaces/IERC3156.sol";
 import "../ERC20.sol";
 
 /**

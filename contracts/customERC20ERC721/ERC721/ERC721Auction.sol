@@ -5,19 +5,24 @@ pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
 import "./extensions/IERC721Metadata.sol";
-import "../utils/Address.sol";
+import "./utils/Address.sol";
 import "../utils/Context.sol";
-import "../utils/Strings.sol";
-import "../utils/introspection/ERC165.sol";
-
+import "./utils/Strings.sol";
+import "./utils/introspection/ERC165.sol";
+import "../ERC20/ERC20.sol";
+import "../ERC20/Auction.sol";
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}.
  */
+
 contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using Strings for uint256;
+
+    //ERC20 Token
+    ERC20 private _token; // getters and setters
 
     // Token name
     string private _name;
@@ -30,6 +35,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
 
+    // Mapping from token ID to creator address
     mapping(uint256 => address) internal _creator;
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
@@ -40,6 +46,11 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
+    mapping(uint256 => Auction) private _auctionContracts;
+
+    // Auction public auction;
+    // Events that will be emitted on changes.
+
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
@@ -48,6 +59,24 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _symbol = symbol_;
     }
 
+    /**
+     * Getter and Setter of _token (ERC20)
+     **/
+    function getToken() public view returns(ERC20){
+        return _token;
+    }
+
+    //  ERC20 private _token; // getters and setters
+    function setToken(address tokenAddress) public {
+        _token = ERC20(tokenAddress);
+    }
+
+    function startAuction(uint256 tokenId, uint time) public {
+        require(msg.sender == _owners[tokenId], 'should be called by only token owner');
+        address owner = _owners[tokenId];
+        _auctionContracts[tokenId] = new Auction(tokenId, time, owner, _token);
+
+    }
     /**
      * @dev See {IERC165-supportsInterface}.
      */
@@ -65,6 +94,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(owner != address(0), "ERC721: balance query for the zero address");
         return _balances[owner];
     }
+
 
     /**
      * @dev See {IERC721-ownerOf}.
@@ -250,8 +280,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _safeMint(address to, uint256 tokenId) internal virtual {
-        _safeMint(to, tokenId, "");
+    function _safeMint(address to, uint256 tokenId, uint256 tokenAmount) internal virtual {
+        _safeMint(to, tokenId, tokenAmount, "");
     }
 
     /**
@@ -261,9 +291,10 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     function _safeMint(
         address to,
         uint256 tokenId,
+        uint256 tokenAmount,
         bytes memory _data
     ) internal virtual {
-        _mint(to, tokenId);
+        _mint(to, tokenId, tokenAmount);
         require(
             _checkOnERC721Received(address(0), to, tokenId, _data),
             "ERC721: transfer to non ERC721Receiver implementer"
@@ -282,10 +313,12 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _mint(address to, uint256 tokenId) internal virtual {
+    function _mint(address to, uint256 tokenId, uint256 tokenAmount) public virtual {
         require(to != address(0), "ERC721: mint to the zero address");
         require(!_exists(tokenId), "ERC721: token already minted");
+        require(tokenAmount > 0);
 
+        require(_token.spendFrom(to, tokenAmount));
 
         _balances[to] += 1;
         _owners[tokenId] = to;
