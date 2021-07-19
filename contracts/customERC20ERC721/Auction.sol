@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./ERC20.sol";
-import "../ERC721/ERC721.sol";
-import "../ERC721/IERC721Receiver.sol";
+import "./ERC20/ERC20.sol";
+import "./ERC721/ERC721.sol";
+import "./ERC721/IERC721Receiver.sol";
 
 contract Auction is IERC721Receiver{
     // Parameters of the auction. Times are either

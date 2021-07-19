@@ -37,6 +37,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
     uint256 private _totalSupply;
     address private _NFTRegistery; //getters and setters
+    mapping (uint256 => address) private _AuctionsAddress;
     string private _name;
     string private _symbol;
 
@@ -69,6 +70,18 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
     function setNFTRegistery(address NFTRegistery) public {
         _NFTRegistery = NFTRegistery;
+    }
+
+    function getAuctionsAddress(uint256 tokenId) public view returns (address) {
+        return _AuctionsAddress[tokenId];
+    }
+    function setAuctionsAddress(uint256 tokenId, address auctionAddress) public {
+        require(msg.sender == _NFTRegistery, "can only called from NFT");
+        _AuctionsAddress[tokenId] = auctionAddress;
+    }
+    function deleteAuctionAddress(uint256 tokenId) public {
+        require(msg.sender == _AuctionsAddress[tokenId], "can only called from Auction");
+        delete _AuctionsAddress[tokenId];
     }
     /**
      * @dev Returns the symbol of the token, usually a shorter version of the
@@ -122,16 +135,29 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         return true;
     }
 
-    function spend(address from, uint256 amount) public returns (bool) {
+    function spendFrom(address from, uint256 amount)public returns (bool){
+        return _spend(0, from, amount, true);
+    }
+
+    function spendFrom(uint256 tokenId, address from, uint256 amount)public returns (bool){
+        return _spend(tokenId, from, amount, false);
+    }
+
+
+    function _spend(uint256 tokenId, address from, uint256 amount, bool isNFT) public virtual returns (bool) {
         require(amount < _totalSupply);
         require(_balances[from] > amount);
-        require(msg.sender == _NFTRegistery);
-
+        if(isNFT){
+            require(msg.sender == _NFTRegistery);
+        }else{
+            require(msg.sender == _AuctionsAddress[tokenId]);
+        }
         _balances[from] = _balances[from] - amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;
         emit Transfer(from, msg.sender, amount);
         return true;
     }
+
     /**
      * @dev See {IERC20-allowance}.
      */
