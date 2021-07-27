@@ -46,7 +46,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    mapping(uint256 => Auction) private _auctionContracts;
+    mapping(uint256 => address) private _auctionContracts;
 
     // Auction public auction;
     // Events that will be emitted on changes.
@@ -76,16 +76,15 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     function startAuction(uint256 tokenId, uint time) public {
         require(msg.sender == _owners[tokenId], 'should be called by only token owner');
-        address nftaddress = address(this);
-        _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress);
-        safeTransferFrom(msg.sender, address(_auctionContracts[tokenId]), tokenId);
-        _token.setAuctionsAddress(tokenId, address(_auctionContracts[tokenId]));
+        _auctionContracts[tokenId] = address(new Auction(tokenId, time, _owners[tokenId], _token, address(this)));
+        safeTransferFrom(msg.sender, _auctionContracts[tokenId], tokenId);
+        _token.setAuctionsAddress(tokenId, _auctionContracts[tokenId]);
     }
 
-    function getAuctionContract(uint256 tokenId) public view returns(Auction){
+    function getAuctionContract(uint256 tokenId) public view returns(address){
         return _auctionContracts[tokenId];
     }
-    function setAuctionContract(uint256 tokenId, Auction auctionAddress) public {
+    function setAuctionContract(uint256 tokenId, address auctionAddress) public {
         require(msg.sender == _owners[tokenId], 'should be called by only token owner');
         _auctionContracts[tokenId] = auctionAddress;
     }
