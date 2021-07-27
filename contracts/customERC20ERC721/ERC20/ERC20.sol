@@ -36,6 +36,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     mapping(address => mapping(address => uint256)) private _allowances;
 
     uint256 private _totalSupply;
+    address private ownership;
     address private _NFTRegistery; //getters and setters
     mapping (uint256 => address) private _AuctionsAddress;
     string private _name;
@@ -53,6 +54,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+        ownership = msg.sender;
     }
 
     /**
@@ -69,6 +71,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         return _NFTRegistery;
     }
     function setNFTRegistery(address NFTRegistery) public {
+        require(msg.sender == ownership, "only owner can change");
         _NFTRegistery = NFTRegistery;
     }
 

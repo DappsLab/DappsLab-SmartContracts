@@ -21,6 +21,8 @@ contract Auction is IERC721Receiver{
 
     // Allowed withdrawals of previous bids
     mapping(address => uint) pendingReturns;
+    mapping(address => uint) bidderIndexes;
+    address[] private allBidders;
 
     // Set to true at the end, disallows any change.
     // By default initialized to `false`.
@@ -50,6 +52,7 @@ contract Auction is IERC721Receiver{
         auctionEndTime = block.timestamp + _biddingTime;
         _token = tokenAddress;
         _NFT = ERC721(NFT);
+        allBidders.push(address(0));
     }
 
     function sendTokenToOwner() public {
@@ -125,21 +128,29 @@ contract Auction is IERC721Receiver{
         }
         highestBidder = msg.sender;
         highestBid = amount;
+        if(bidderIndexes[msg.sender] == 0){
+            allBidders.push(msg.sender);
+            bidderIndexes[msg.sender] = allBidders.length-1;
+        }
         emit HighestBidIncreased(_tokenId, msg.sender, amount);
     }
 
     /// Withdraw a bid that was overbid.
-    function withdraw() public returns (bool) {
-        uint amount = pendingReturns[msg.sender];
+    function withdraw()public returns(bool){
+        return _withdraw(msg.sender);
+    }
+
+    function _withdraw(address bidder) private returns (bool) {
+        uint amount = pendingReturns[bidder];
         if (amount > 0) {
             // It is important to set this to zero because the recipient
             // can call this function again as part of the receiving call
             // before `send` returns.
-            pendingReturns[msg.sender] = 0;
+            pendingReturns[bidder] = 0;
 
-            if (!_token.transfer(msg.sender, amount)) {
+            if (!_token.transfer(bidder, amount)) {
                 // No need to call throw here, just reset the amount owing
-                pendingReturns[msg.sender] = amount;
+                pendingReturns[bidder] = amount;
                 return false;
             }
         }
@@ -163,6 +174,7 @@ contract Auction is IERC721Receiver{
         // external contracts.
 
         // 1. Conditions
+        require(msg.sender == beneficiary, "only owner of token can call this function");
         require(block.timestamp >= auctionEndTime, "Auction not yet ended.");
         require(!ended, "auctionEnd has already been called.");
 
@@ -174,9 +186,13 @@ contract Auction is IERC721Receiver{
         if(highestBidder != address(0)){
             _NFT._spend(_tokenId, highestBidder);
             _token.transfer(beneficiary, highestBid);
+            for (uint256 i = 1; i < allBidders.length; i++){
+                _withdraw(allBidders[i]);
+            }
         }else{
             _NFT._spend(_tokenId, beneficiary);
         }
-
+        _NFT.deleteAuctionContract(_tokenId);
+        _token.deleteAuctionAddress(_tokenId);
     }
 }
