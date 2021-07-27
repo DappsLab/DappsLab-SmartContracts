@@ -29,8 +29,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     // Token symbol
     string private _symbol;
-
-
+    address private ownership;
     uint8 public _creatorComission = 10;
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
@@ -57,37 +56,45 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+        ownership = msg.sender;
     }
 
-    function getCreator(uint256 tokenId) public view returns(address){
+    function getCreator(uint256 tokenId) public view returns (address){
         return _creator[tokenId];
     }
     /**
      * Getter and Setter of _token (ERC20)
      **/
-    function getToken() public view returns(ERC20){
+    function getToken() public view returns (ERC20){
         return _token;
     }
 
     //  ERC20 private _token; // getters and setters
     function setToken(address tokenAddress) public {
+        require(msg.sender == ownership, "can be called by Contract Owner");
         _token = ERC20(tokenAddress);
     }
 
     function startAuction(uint256 tokenId, uint time) public {
-        require(msg.sender == _owners[tokenId], 'should be called by only token owner');
+        require(msg.sender == _owners[tokenId], 'can only be called by Owner');
         address nftaddress = address(this);
         _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress);
         safeTransferFrom(msg.sender, address(_auctionContracts[tokenId]), tokenId);
         _token.setAuctionsAddress(tokenId, address(_auctionContracts[tokenId]));
     }
 
-    function getAuctionContract(uint256 tokenId) public view returns(Auction){
+    function getAuctionContract(uint256 tokenId) public view returns (Auction){
         return _auctionContracts[tokenId];
     }
+
     function setAuctionContract(uint256 tokenId, Auction auctionAddress) public {
-        require(msg.sender == _owners[tokenId], 'should be called by only token owner');
+        require(msg.sender == _owners[tokenId], 'can only be called by Owner');
         _auctionContracts[tokenId] = auctionAddress;
+    }
+
+    function deleteAuctionContract(uint256 tokenId) public {
+        require(msg.sender == _owners[tokenId], "can only called by Auction/Owner");
+        delete _auctionContracts[tokenId];
     }
     /**
      * @dev See {IERC165-supportsInterface}.
