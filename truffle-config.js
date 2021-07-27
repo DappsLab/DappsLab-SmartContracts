@@ -23,7 +23,7 @@
  */
 
 const HDWallet = require("truffle-hdwallet-provider");
-const developmentMnemonic = "recipe flock effort test evil card identify grab shift venture movie tonight";
+const developmentMnemonic = "demise saddle enable client bid grape sister age aisle divide planet mushroom";
 
 const infuraKey = "a3f4dff0483a48ebaec64b896445c146";
 //
