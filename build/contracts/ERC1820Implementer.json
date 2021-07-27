@@ -1007,18 +1007,18 @@
     "absolutePath": "project:/contracts/customERC20ERC721/utils/introspection/ERC1820Implementer.sol",
     "exportedSymbols": {
       "ERC1820Implementer": [
-        6699
+        6705
       ],
       "IERC1820Implementer": [
-        6725
+        6731
       ]
     },
-    "id": 6700,
+    "id": 6706,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6642,
+        "id": 6648,
         "literals": [
           "solidity",
           "^",
@@ -1031,10 +1031,10 @@
       {
         "absolutePath": "project:/contracts/customERC20ERC721/utils/introspection/IERC1820Implementer.sol",
         "file": "./IERC1820Implementer.sol",
-        "id": 6643,
+        "id": 6649,
         "nodeType": "ImportDirective",
-        "scope": 6700,
-        "sourceUnit": 6726,
+        "scope": 6706,
+        "sourceUnit": 6732,
         "src": "58:35:47",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1044,43 +1044,43 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 6645,
+              "id": 6651,
               "name": "IERC1820Implementer",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 6725,
+              "referencedDeclaration": 6731,
               "src": "435:19:47"
             },
-            "id": 6646,
+            "id": 6652,
             "nodeType": "InheritanceSpecifier",
             "src": "435:19:47"
           }
         ],
         "contractDependencies": [
-          6725
+          6731
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 6644,
+          "id": 6650,
           "nodeType": "StructuredDocumentation",
           "src": "95:308:47",
           "text": " @dev Implementation of the {IERC1820Implementer} interface.\n Contracts may inherit from this and call {_registerInterfaceForAddress} to\n declare their willingness to be implementers.\n {IERC1820Registry-setInterfaceImplementer} should then be called for the\n registration to be complete."
         },
         "fullyImplemented": true,
-        "id": 6699,
+        "id": 6705,
         "linearizedBaseContracts": [
-          6699,
-          6725
+          6705,
+          6731
         ],
         "name": "ERC1820Implementer",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 6651,
+            "id": 6657,
             "mutability": "constant",
             "name": "_ERC1820_ACCEPT_MAGIC",
             "nodeType": "VariableDeclaration",
-            "scope": 6699,
+            "scope": 6705,
             "src": "461:82:47",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1089,7 +1089,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 6647,
+              "id": 6653,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "461:7:47",
@@ -1102,7 +1102,7 @@
               "arguments": [
                 {
                   "hexValue": "455243313832305f4143434550545f4d41474943",
-                  "id": 6649,
+                  "id": 6655,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
@@ -1124,7 +1124,7 @@
                     "typeString": "literal_string \"ERC1820_ACCEPT_MAGIC\""
                   }
                 ],
-                "id": 6648,
+                "id": 6654,
                 "name": "keccak256",
                 "nodeType": "Identifier",
                 "overloadedDeclarations": [],
@@ -1135,7 +1135,7 @@
                   "typeString": "function (bytes memory) pure returns (bytes32)"
                 }
               },
-              "id": 6650,
+              "id": 6656,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1154,11 +1154,11 @@
           },
           {
             "constant": false,
-            "id": 6657,
+            "id": 6663,
             "mutability": "mutable",
             "name": "_supportedInterfaces",
             "nodeType": "VariableDeclaration",
-            "scope": 6699,
+            "scope": 6705,
             "src": "550:73:47",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1167,9 +1167,9 @@
               "typeString": "mapping(bytes32 => mapping(address => bool))"
             },
             "typeName": {
-              "id": 6656,
+              "id": 6662,
               "keyType": {
-                "id": 6652,
+                "id": 6658,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "558:7:47",
@@ -1185,9 +1185,9 @@
                 "typeString": "mapping(bytes32 => mapping(address => bool))"
               },
               "valueType": {
-                "id": 6655,
+                "id": 6661,
                 "keyType": {
-                  "id": 6653,
+                  "id": 6659,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "577:7:47",
@@ -1203,7 +1203,7 @@
                   "typeString": "mapping(address => bool)"
                 },
                 "valueType": {
-                  "id": 6654,
+                  "id": 6660,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "588:4:47",
@@ -1218,10 +1218,10 @@
           },
           {
             "baseFunctions": [
-              6724
+              6730
             ],
             "body": {
-              "id": 6680,
+              "id": 6686,
               "nodeType": "Block",
               "src": "889:108:47",
               "statements": [
@@ -1230,24 +1230,24 @@
                     "condition": {
                       "baseExpression": {
                         "baseExpression": {
-                          "id": 6668,
+                          "id": 6674,
                           "name": "_supportedInterfaces",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6657,
+                          "referencedDeclaration": 6663,
                           "src": "906:20:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_mapping$_t_address_$_t_bool_$_$",
                             "typeString": "mapping(bytes32 => mapping(address => bool))"
                           }
                         },
-                        "id": 6670,
+                        "id": 6676,
                         "indexExpression": {
-                          "id": 6669,
+                          "id": 6675,
                           "name": "interfaceHash",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6660,
+                          "referencedDeclaration": 6666,
                           "src": "927:13:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -1265,13 +1265,13 @@
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 6672,
+                      "id": 6678,
                       "indexExpression": {
-                        "id": 6671,
+                        "id": 6677,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 6662,
+                        "referencedDeclaration": 6668,
                         "src": "942:7:47",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1293,7 +1293,7 @@
                       "arguments": [
                         {
                           "hexValue": "30783030",
-                          "id": 6676,
+                          "id": 6682,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -1315,7 +1315,7 @@
                             "typeString": "int_const 0"
                           }
                         ],
-                        "id": 6675,
+                        "id": 6681,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1327,14 +1327,14 @@
                           "typeString": "type(bytes32)"
                         },
                         "typeName": {
-                          "id": 6674,
+                          "id": 6680,
                           "name": "bytes32",
                           "nodeType": "ElementaryTypeName",
                           "src": "977:7:47",
                           "typeDescriptions": {}
                         }
                       },
-                      "id": 6677,
+                      "id": 6683,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1349,7 +1349,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 6678,
+                    "id": 6684,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1357,11 +1357,11 @@
                     "nodeType": "Conditional",
                     "src": "906:84:47",
                     "trueExpression": {
-                      "id": 6673,
+                      "id": 6679,
                       "name": "_ERC1820_ACCEPT_MAGIC",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 6651,
+                      "referencedDeclaration": 6657,
                       "src": "953:21:47",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -1373,43 +1373,43 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "functionReturnParameters": 6667,
-                  "id": 6679,
+                  "functionReturnParameters": 6673,
+                  "id": 6685,
                   "nodeType": "Return",
                   "src": "899:91:47"
                 }
               ]
             },
             "documentation": {
-              "id": 6658,
+              "id": 6664,
               "nodeType": "StructuredDocumentation",
               "src": "630:82:47",
               "text": " @dev See {IERC1820Implementer-canImplementInterfaceForAddress}."
             },
             "functionSelector": "249cb3fa",
-            "id": 6681,
+            "id": 6687,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "canImplementInterfaceForAddress",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 6664,
+              "id": 6670,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "850:8:47"
             },
             "parameters": {
-              "id": 6663,
+              "id": 6669,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6660,
+                  "id": 6666,
                   "mutability": "mutable",
                   "name": "interfaceHash",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "758:21:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1418,7 +1418,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6659,
+                    "id": 6665,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "758:7:47",
@@ -1431,11 +1431,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 6662,
+                  "id": 6668,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "781:15:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1444,7 +1444,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 6661,
+                    "id": 6667,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "781:7:47",
@@ -1460,16 +1460,16 @@
               "src": "757:40:47"
             },
             "returnParameters": {
-              "id": 6667,
+              "id": 6673,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6666,
+                  "id": 6672,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "876:7:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1478,7 +1478,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6665,
+                    "id": 6671,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "876:7:47",
@@ -1492,7 +1492,7 @@
               ],
               "src": "875:9:47"
             },
-            "scope": 6699,
+            "scope": 6705,
             "src": "717:280:47",
             "stateMutability": "view",
             "virtual": true,
@@ -1500,13 +1500,13 @@
           },
           {
             "body": {
-              "id": 6697,
+              "id": 6703,
               "nodeType": "Block",
               "src": "1327:68:47",
               "statements": [
                 {
                   "expression": {
-                    "id": 6695,
+                    "id": 6701,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1514,24 +1514,24 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "baseExpression": {
-                          "id": 6689,
+                          "id": 6695,
                           "name": "_supportedInterfaces",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6657,
+                          "referencedDeclaration": 6663,
                           "src": "1337:20:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_mapping$_t_address_$_t_bool_$_$",
                             "typeString": "mapping(bytes32 => mapping(address => bool))"
                           }
                         },
-                        "id": 6692,
+                        "id": 6698,
                         "indexExpression": {
-                          "id": 6690,
+                          "id": 6696,
                           "name": "interfaceHash",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6684,
+                          "referencedDeclaration": 6690,
                           "src": "1358:13:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -1549,13 +1549,13 @@
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 6693,
+                      "id": 6699,
                       "indexExpression": {
-                        "id": 6691,
+                        "id": 6697,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 6686,
+                        "referencedDeclaration": 6692,
                         "src": "1373:7:47",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1577,7 +1577,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "74727565",
-                      "id": 6694,
+                      "id": 6700,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1597,35 +1597,35 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 6696,
+                  "id": 6702,
                   "nodeType": "ExpressionStatement",
                   "src": "1337:51:47"
                 }
               ]
             },
             "documentation": {
-              "id": 6682,
+              "id": 6688,
               "nodeType": "StructuredDocumentation",
               "src": "1003:224:47",
               "text": " @dev Declares the contract as willing to be an implementer of\n `interfaceHash` for `account`.\n See {IERC1820Registry-setInterfaceImplementer} and\n {IERC1820Registry-interfaceHash}."
             },
-            "id": 6698,
+            "id": 6704,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_registerInterfaceForAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 6687,
+              "id": 6693,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6684,
+                  "id": 6690,
                   "mutability": "mutable",
                   "name": "interfaceHash",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6698,
+                  "scope": 6704,
                   "src": "1270:21:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1634,7 +1634,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6683,
+                    "id": 6689,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1270:7:47",
@@ -1647,11 +1647,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 6686,
+                  "id": 6692,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6698,
+                  "scope": 6704,
                   "src": "1293:15:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1660,7 +1660,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 6685,
+                    "id": 6691,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1293:7:47",
@@ -1676,19 +1676,19 @@
               "src": "1269:40:47"
             },
             "returnParameters": {
-              "id": 6688,
+              "id": 6694,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1327:0:47"
             },
-            "scope": 6699,
+            "scope": 6705,
             "src": "1232:163:47",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "internal"
           }
         ],
-        "scope": 6700,
+        "scope": 6706,
         "src": "404:993:47"
       }
     ],
@@ -1698,18 +1698,18 @@
     "absolutePath": "project:/contracts/customERC20ERC721/utils/introspection/ERC1820Implementer.sol",
     "exportedSymbols": {
       "ERC1820Implementer": [
-        6699
+        6705
       ],
       "IERC1820Implementer": [
-        6725
+        6731
       ]
     },
-    "id": 6700,
+    "id": 6706,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6642,
+        "id": 6648,
         "literals": [
           "solidity",
           "^",
@@ -1722,10 +1722,10 @@
       {
         "absolutePath": "project:/contracts/customERC20ERC721/utils/introspection/IERC1820Implementer.sol",
         "file": "./IERC1820Implementer.sol",
-        "id": 6643,
+        "id": 6649,
         "nodeType": "ImportDirective",
-        "scope": 6700,
-        "sourceUnit": 6726,
+        "scope": 6706,
+        "sourceUnit": 6732,
         "src": "58:35:47",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1735,43 +1735,43 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 6645,
+              "id": 6651,
               "name": "IERC1820Implementer",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 6725,
+              "referencedDeclaration": 6731,
               "src": "435:19:47"
             },
-            "id": 6646,
+            "id": 6652,
             "nodeType": "InheritanceSpecifier",
             "src": "435:19:47"
           }
         ],
         "contractDependencies": [
-          6725
+          6731
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 6644,
+          "id": 6650,
           "nodeType": "StructuredDocumentation",
           "src": "95:308:47",
           "text": " @dev Implementation of the {IERC1820Implementer} interface.\n Contracts may inherit from this and call {_registerInterfaceForAddress} to\n declare their willingness to be implementers.\n {IERC1820Registry-setInterfaceImplementer} should then be called for the\n registration to be complete."
         },
         "fullyImplemented": true,
-        "id": 6699,
+        "id": 6705,
         "linearizedBaseContracts": [
-          6699,
-          6725
+          6705,
+          6731
         ],
         "name": "ERC1820Implementer",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 6651,
+            "id": 6657,
             "mutability": "constant",
             "name": "_ERC1820_ACCEPT_MAGIC",
             "nodeType": "VariableDeclaration",
-            "scope": 6699,
+            "scope": 6705,
             "src": "461:82:47",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1780,7 +1780,7 @@
               "typeString": "bytes32"
             },
             "typeName": {
-              "id": 6647,
+              "id": 6653,
               "name": "bytes32",
               "nodeType": "ElementaryTypeName",
               "src": "461:7:47",
@@ -1793,7 +1793,7 @@
               "arguments": [
                 {
                   "hexValue": "455243313832305f4143434550545f4d41474943",
-                  "id": 6649,
+                  "id": 6655,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
@@ -1815,7 +1815,7 @@
                     "typeString": "literal_string \"ERC1820_ACCEPT_MAGIC\""
                   }
                 ],
-                "id": 6648,
+                "id": 6654,
                 "name": "keccak256",
                 "nodeType": "Identifier",
                 "overloadedDeclarations": [],
@@ -1826,7 +1826,7 @@
                   "typeString": "function (bytes memory) pure returns (bytes32)"
                 }
               },
-              "id": 6650,
+              "id": 6656,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1845,11 +1845,11 @@
           },
           {
             "constant": false,
-            "id": 6657,
+            "id": 6663,
             "mutability": "mutable",
             "name": "_supportedInterfaces",
             "nodeType": "VariableDeclaration",
-            "scope": 6699,
+            "scope": 6705,
             "src": "550:73:47",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1858,9 +1858,9 @@
               "typeString": "mapping(bytes32 => mapping(address => bool))"
             },
             "typeName": {
-              "id": 6656,
+              "id": 6662,
               "keyType": {
-                "id": 6652,
+                "id": 6658,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "558:7:47",
@@ -1876,9 +1876,9 @@
                 "typeString": "mapping(bytes32 => mapping(address => bool))"
               },
               "valueType": {
-                "id": 6655,
+                "id": 6661,
                 "keyType": {
-                  "id": 6653,
+                  "id": 6659,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "577:7:47",
@@ -1894,7 +1894,7 @@
                   "typeString": "mapping(address => bool)"
                 },
                 "valueType": {
-                  "id": 6654,
+                  "id": 6660,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "588:4:47",
@@ -1909,10 +1909,10 @@
           },
           {
             "baseFunctions": [
-              6724
+              6730
             ],
             "body": {
-              "id": 6680,
+              "id": 6686,
               "nodeType": "Block",
               "src": "889:108:47",
               "statements": [
@@ -1921,24 +1921,24 @@
                     "condition": {
                       "baseExpression": {
                         "baseExpression": {
-                          "id": 6668,
+                          "id": 6674,
                           "name": "_supportedInterfaces",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6657,
+                          "referencedDeclaration": 6663,
                           "src": "906:20:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_mapping$_t_address_$_t_bool_$_$",
                             "typeString": "mapping(bytes32 => mapping(address => bool))"
                           }
                         },
-                        "id": 6670,
+                        "id": 6676,
                         "indexExpression": {
-                          "id": 6669,
+                          "id": 6675,
                           "name": "interfaceHash",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6660,
+                          "referencedDeclaration": 6666,
                           "src": "927:13:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -1956,13 +1956,13 @@
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 6672,
+                      "id": 6678,
                       "indexExpression": {
-                        "id": 6671,
+                        "id": 6677,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 6662,
+                        "referencedDeclaration": 6668,
                         "src": "942:7:47",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1984,7 +1984,7 @@
                       "arguments": [
                         {
                           "hexValue": "30783030",
-                          "id": 6676,
+                          "id": 6682,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -2006,7 +2006,7 @@
                             "typeString": "int_const 0"
                           }
                         ],
-                        "id": 6675,
+                        "id": 6681,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2018,14 +2018,14 @@
                           "typeString": "type(bytes32)"
                         },
                         "typeName": {
-                          "id": 6674,
+                          "id": 6680,
                           "name": "bytes32",
                           "nodeType": "ElementaryTypeName",
                           "src": "977:7:47",
                           "typeDescriptions": {}
                         }
                       },
-                      "id": 6677,
+                      "id": 6683,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2040,7 +2040,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 6678,
+                    "id": 6684,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2048,11 +2048,11 @@
                     "nodeType": "Conditional",
                     "src": "906:84:47",
                     "trueExpression": {
-                      "id": 6673,
+                      "id": 6679,
                       "name": "_ERC1820_ACCEPT_MAGIC",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 6651,
+                      "referencedDeclaration": 6657,
                       "src": "953:21:47",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes32",
@@ -2064,43 +2064,43 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "functionReturnParameters": 6667,
-                  "id": 6679,
+                  "functionReturnParameters": 6673,
+                  "id": 6685,
                   "nodeType": "Return",
                   "src": "899:91:47"
                 }
               ]
             },
             "documentation": {
-              "id": 6658,
+              "id": 6664,
               "nodeType": "StructuredDocumentation",
               "src": "630:82:47",
               "text": " @dev See {IERC1820Implementer-canImplementInterfaceForAddress}."
             },
             "functionSelector": "249cb3fa",
-            "id": 6681,
+            "id": 6687,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "canImplementInterfaceForAddress",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 6664,
+              "id": 6670,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "850:8:47"
             },
             "parameters": {
-              "id": 6663,
+              "id": 6669,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6660,
+                  "id": 6666,
                   "mutability": "mutable",
                   "name": "interfaceHash",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "758:21:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2109,7 +2109,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6659,
+                    "id": 6665,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "758:7:47",
@@ -2122,11 +2122,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 6662,
+                  "id": 6668,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "781:15:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2135,7 +2135,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 6661,
+                    "id": 6667,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "781:7:47",
@@ -2151,16 +2151,16 @@
               "src": "757:40:47"
             },
             "returnParameters": {
-              "id": 6667,
+              "id": 6673,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6666,
+                  "id": 6672,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6681,
+                  "scope": 6687,
                   "src": "876:7:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2169,7 +2169,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6665,
+                    "id": 6671,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "876:7:47",
@@ -2183,7 +2183,7 @@
               ],
               "src": "875:9:47"
             },
-            "scope": 6699,
+            "scope": 6705,
             "src": "717:280:47",
             "stateMutability": "view",
             "virtual": true,
@@ -2191,13 +2191,13 @@
           },
           {
             "body": {
-              "id": 6697,
+              "id": 6703,
               "nodeType": "Block",
               "src": "1327:68:47",
               "statements": [
                 {
                   "expression": {
-                    "id": 6695,
+                    "id": 6701,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2205,24 +2205,24 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "baseExpression": {
-                          "id": 6689,
+                          "id": 6695,
                           "name": "_supportedInterfaces",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6657,
+                          "referencedDeclaration": 6663,
                           "src": "1337:20:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_mapping$_t_address_$_t_bool_$_$",
                             "typeString": "mapping(bytes32 => mapping(address => bool))"
                           }
                         },
-                        "id": 6692,
+                        "id": 6698,
                         "indexExpression": {
-                          "id": 6690,
+                          "id": 6696,
                           "name": "interfaceHash",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 6684,
+                          "referencedDeclaration": 6690,
                           "src": "1358:13:47",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -2240,13 +2240,13 @@
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 6693,
+                      "id": 6699,
                       "indexExpression": {
-                        "id": 6691,
+                        "id": 6697,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 6686,
+                        "referencedDeclaration": 6692,
                         "src": "1373:7:47",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2268,7 +2268,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "74727565",
-                      "id": 6694,
+                      "id": 6700,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2288,35 +2288,35 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 6696,
+                  "id": 6702,
                   "nodeType": "ExpressionStatement",
                   "src": "1337:51:47"
                 }
               ]
             },
             "documentation": {
-              "id": 6682,
+              "id": 6688,
               "nodeType": "StructuredDocumentation",
               "src": "1003:224:47",
               "text": " @dev Declares the contract as willing to be an implementer of\n `interfaceHash` for `account`.\n See {IERC1820Registry-setInterfaceImplementer} and\n {IERC1820Registry-interfaceHash}."
             },
-            "id": 6698,
+            "id": 6704,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_registerInterfaceForAddress",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 6687,
+              "id": 6693,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6684,
+                  "id": 6690,
                   "mutability": "mutable",
                   "name": "interfaceHash",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6698,
+                  "scope": 6704,
                   "src": "1270:21:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2325,7 +2325,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6683,
+                    "id": 6689,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1270:7:47",
@@ -2338,11 +2338,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 6686,
+                  "id": 6692,
                   "mutability": "mutable",
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6698,
+                  "scope": 6704,
                   "src": "1293:15:47",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2351,7 +2351,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 6685,
+                    "id": 6691,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1293:7:47",
@@ -2367,19 +2367,19 @@
               "src": "1269:40:47"
             },
             "returnParameters": {
-              "id": 6688,
+              "id": 6694,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1327:0:47"
             },
-            "scope": 6699,
+            "scope": 6705,
             "src": "1232:163:47",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "internal"
           }
         ],
-        "scope": 6700,
+        "scope": 6706,
         "src": "404:993:47"
       }
     ],
@@ -2391,7 +2391,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.2",
-  "updatedAt": "2021-07-27T08:00:18.877Z",
+  "updatedAt": "2021-07-27T11:42:39.409Z",
   "devdoc": {
     "details": "Implementation of the {IERC1820Implementer} interface. Contracts may inherit from this and call {_registerInterfaceForAddress} to declare their willingness to be implementers. {IERC1820Registry-setInterfaceImplementer} should then be called for the registration to be complete.",
     "kind": "dev",

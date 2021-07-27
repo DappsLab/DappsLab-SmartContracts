@@ -42,13 +42,13 @@ contract Auction is IERC721Receiver{
         uint256 tokenId,
         uint _biddingTime,
         address _beneficiary,
-        ERC20 tokenAddress,
+        address tokenAddress,
         address NFT
     ) {
         _tokenId = tokenId;
         beneficiary = payable(_beneficiary);
         auctionEndTime = block.timestamp + _biddingTime;
-        _token = tokenAddress;
+        _token = ERC20(tokenAddress);
         _NFT = ERC721(NFT);
     }
 

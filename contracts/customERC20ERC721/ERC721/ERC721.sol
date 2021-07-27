@@ -30,8 +30,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Token symbol
     string private _symbol;
 
-
-    uint8 public _creatorComission = 10;
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
 
@@ -76,7 +74,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     function startAuction(uint256 tokenId, uint time) public {
         require(msg.sender == _owners[tokenId], 'should be called by only token owner');
-        _auctionContracts[tokenId] = address(new Auction(tokenId, time, _owners[tokenId], _token, address(this)));
+        _auctionContracts[tokenId] = address(new Auction(tokenId, time, _owners[tokenId], address(_token), address(this)));
         safeTransferFrom(msg.sender, _auctionContracts[tokenId], tokenId);
         _token.setAuctionsAddress(tokenId, _auctionContracts[tokenId]);
     }
