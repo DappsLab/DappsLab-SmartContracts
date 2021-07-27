@@ -5,12 +5,12 @@ pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
 import "./extensions/IERC721Metadata.sol";
-import "./utils/Address.sol";
+import "../utils/Address.sol";
 import "../utils/Context.sol";
-import "./utils/Strings.sol";
-import "./utils/introspection/ERC165.sol";
+import "../utils/Strings.sol";
+import "../utils/introspection/ERC165.sol";
 import "../ERC20/ERC20.sol";
-import "../ERC20/Auction.sol";
+import "../Auction.sol";
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
  * the Metadata extension, but not including the Enumerable extension, which is available separately as

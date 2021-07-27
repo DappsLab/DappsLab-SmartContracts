@@ -1,29 +1,29 @@
 {
   "contractName": "BitMaps",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential. Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor].\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Volumes/Transcend/Projects/DappsLab/Lottery-Smart-Contract/contracts/customERC20ERC721/utils/structs/BitMaps.sol\":\"BitMaps\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Volumes/Transcend/Projects/DappsLab/Lottery-Smart-Contract/contracts/customERC20ERC721/utils/structs/BitMaps.sol\":{\"keccak256\":\"0xe3d4d4d24f7f3182106eb15955ca16cd34e839f4cc6a50f1d58d39490f47d2b7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://89a9f026328c8bfdb0c4fa88be9e81ef21284871b395867ac07792530284cbd4\",\"dweb:/ipfs/QmRbuSxuPwLuUhhU7gKSWaB3CC5ZuqDytRqHKzT7w6XTom\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b4f478312b1fcee32ab250ee96068e7cc403741003f86489d9e320ba7a22306264736f6c63430008000033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b4f478312b1fcee32ab250ee96068e7cc403741003f86489d9e320ba7a22306264736f6c63430008000033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential. Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor].\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/customERC20ERC721/utils/structs/BitMaps.sol\":\"BitMaps\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/customERC20ERC721/utils/structs/BitMaps.sol\":{\"keccak256\":\"0xe3d4d4d24f7f3182106eb15955ca16cd34e839f4cc6a50f1d58d39490f47d2b7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://89a9f026328c8bfdb0c4fa88be9e81ef21284871b395867ac07792530284cbd4\",\"dweb:/ipfs/QmRbuSxuPwLuUhhU7gKSWaB3CC5ZuqDytRqHKzT7w6XTom\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220657c1b034804eba99284b1219976dc8de46824d69b36b8e0fb67fecb2eb54f4364736f6c63430008000033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220657c1b034804eba99284b1219976dc8de46824d69b36b8e0fb67fecb2eb54f4364736f6c63430008000033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "330:1184:59:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "330:1184:59:-:0;;;;;;;;",
+  "sourceMap": "330:1184:55:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "330:1184:55:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\n/**\n * @dev Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential.\n * Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor].\n */\nlibrary BitMaps {\n    struct BitMap {\n        mapping(uint256 => uint256) _data;\n    }\n\n    /**\n     * @dev Returns whether the bit at `index` is set.\n     */\n    function get(BitMap storage bitmap, uint256 index) internal view returns (bool) {\n        uint256 bucket = index / 256;\n        uint256 mask = 1 << (index % 256);\n        return bitmap._data[bucket] & mask != 0;\n    }\n\n    /**\n     * @dev Sets the bit at `index` to the boolean `value`.\n     */\n    function setTo(\n        BitMap storage bitmap,\n        uint256 index,\n        bool value\n    ) internal {\n        if (value) {\n            set(bitmap, index);\n        } else {\n            unset(bitmap, index);\n        }\n    }\n\n    /**\n     * @dev Sets the bit at `index`.\n     */\n    function set(BitMap storage bitmap, uint256 index) internal {\n        uint256 bucket = index / 256;\n        uint256 mask = 1 << (index % 256);\n        bitmap._data[bucket] |= mask;\n    }\n\n    /**\n     * @dev Unsets the bit at `index`.\n     */\n    function unset(BitMap storage bitmap, uint256 index) internal {\n        uint256 bucket = index / 256;\n        uint256 mask = 1 << (index % 256);\n        bitmap._data[bucket] &= ~mask;\n    }\n}\n",
   "sourcePath": "/Volumes/Transcend/Projects/DappsLab/Lottery-Smart-Contract/contracts/customERC20ERC721/utils/structs/BitMaps.sol",
   "ast": {
-    "absolutePath": "/Volumes/Transcend/Projects/DappsLab/Lottery-Smart-Contract/contracts/customERC20ERC721/utils/structs/BitMaps.sol",
+    "absolutePath": "project:/contracts/customERC20ERC721/utils/structs/BitMaps.sol",
     "exportedSymbols": {
       "BitMaps": [
-        9540
+        7822
       ]
     },
-    "id": 9541,
+    "id": 7823,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 9404,
+        "id": 7686,
         "literals": [
           "solidity",
           "^",
@@ -31,7 +31,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:59"
+        "src": "32:23:55"
       },
       {
         "abstract": false,
@@ -39,31 +39,31 @@
         "contractDependencies": [],
         "contractKind": "library",
         "documentation": {
-          "id": 9405,
+          "id": 7687,
           "nodeType": "StructuredDocumentation",
-          "src": "57:272:59",
+          "src": "57:272:55",
           "text": " @dev Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential.\n Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor]."
         },
         "fullyImplemented": true,
-        "id": 9540,
+        "id": 7822,
         "linearizedBaseContracts": [
-          9540
+          7822
         ],
         "name": "BitMaps",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "BitMaps.BitMap",
-            "id": 9410,
+            "id": 7692,
             "members": [
               {
                 "constant": false,
-                "id": 9409,
+                "id": 7691,
                 "mutability": "mutable",
                 "name": "_data",
                 "nodeType": "VariableDeclaration",
-                "scope": 9410,
-                "src": "376:33:59",
+                "scope": 7692,
+                "src": "376:33:55",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -71,28 +71,28 @@
                   "typeString": "mapping(uint256 => uint256)"
                 },
                 "typeName": {
-                  "id": 9408,
+                  "id": 7690,
                   "keyType": {
-                    "id": 9406,
+                    "id": 7688,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "384:7:59",
+                    "src": "384:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "376:27:59",
+                  "src": "376:27:55",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                     "typeString": "mapping(uint256 => uint256)"
                   },
                   "valueType": {
-                    "id": 9407,
+                    "id": 7689,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "395:7:59",
+                    "src": "395:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -104,29 +104,29 @@
             ],
             "name": "BitMap",
             "nodeType": "StructDefinition",
-            "scope": 9540,
-            "src": "352:64:59",
+            "scope": 7822,
+            "src": "352:64:55",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 9445,
+              "id": 7727,
               "nodeType": "Block",
-              "src": "573:137:59",
+              "src": "573:137:55",
               "statements": [
                 {
                   "assignments": [
-                    9422
+                    7704
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9422,
+                      "id": 7704,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9445,
-                      "src": "583:14:59",
+                      "scope": 7727,
+                      "src": "583:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -134,10 +134,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9421,
+                        "id": 7703,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "583:7:59",
+                        "src": "583:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -146,24 +146,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9426,
+                  "id": 7708,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9425,
+                    "id": 7707,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9423,
+                      "id": 7705,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9416,
-                      "src": "600:5:59",
+                      "referencedDeclaration": 7698,
+                      "src": "600:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -173,42 +173,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9424,
+                      "id": 7706,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "608:3:59",
+                      "src": "608:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "600:11:59",
+                    "src": "600:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "583:28:59"
+                  "src": "583:28:55"
                 },
                 {
                   "assignments": [
-                    9428
+                    7710
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9428,
+                      "id": 7710,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9445,
-                      "src": "621:12:59",
+                      "scope": 7727,
+                      "src": "621:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -216,10 +216,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9427,
+                        "id": 7709,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "621:7:59",
+                        "src": "621:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -228,27 +228,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9435,
+                  "id": 7717,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9434,
+                    "id": 7716,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9429,
+                      "id": 7711,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "636:1:59",
+                      "src": "636:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -264,18 +264,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9432,
+                          "id": 7714,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9430,
+                            "id": 7712,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9416,
-                            "src": "642:5:59",
+                            "referencedDeclaration": 7698,
+                            "src": "642:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -285,48 +285,48 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9431,
+                            "id": 7713,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "650:3:59",
+                            "src": "650:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "642:11:59",
+                          "src": "642:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9433,
+                      "id": 7715,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "641:13:59",
+                      "src": "641:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "636:18:59",
+                    "src": "636:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "621:33:59"
+                  "src": "621:33:55"
                 },
                 {
                   "expression": {
@@ -334,7 +334,7 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9443,
+                    "id": 7725,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -344,7 +344,7 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 9441,
+                      "id": 7723,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -352,39 +352,39 @@
                       "leftExpression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 9436,
+                            "id": 7718,
                             "name": "bitmap",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9414,
-                            "src": "671:6:59",
+                            "referencedDeclaration": 7696,
+                            "src": "671:6:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                              "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                               "typeString": "struct BitMaps.BitMap storage pointer"
                             }
                           },
-                          "id": 9437,
+                          "id": 7719,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "_data",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 9409,
-                          "src": "671:12:59",
+                          "referencedDeclaration": 7691,
+                          "src": "671:12:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                             "typeString": "mapping(uint256 => uint256)"
                           }
                         },
-                        "id": 9439,
+                        "id": 7721,
                         "indexExpression": {
-                          "id": 9438,
+                          "id": 7720,
                           "name": "bucket",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9422,
-                          "src": "684:6:59",
+                          "referencedDeclaration": 7704,
+                          "src": "684:6:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -395,7 +395,7 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "671:20:59",
+                        "src": "671:20:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -404,18 +404,18 @@
                       "nodeType": "BinaryOperation",
                       "operator": "&",
                       "rightExpression": {
-                        "id": 9440,
+                        "id": 7722,
                         "name": "mask",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9428,
-                        "src": "694:4:59",
+                        "referencedDeclaration": 7710,
+                        "src": "694:4:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "src": "671:27:59",
+                      "src": "671:27:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -425,77 +425,77 @@
                     "operator": "!=",
                     "rightExpression": {
                       "hexValue": "30",
-                      "id": 9442,
+                      "id": 7724,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "702:1:59",
+                      "src": "702:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "671:32:59",
+                    "src": "671:32:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 9420,
-                  "id": 9444,
+                  "functionReturnParameters": 7702,
+                  "id": 7726,
                   "nodeType": "Return",
-                  "src": "664:39:59"
+                  "src": "664:39:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9411,
+              "id": 7693,
               "nodeType": "StructuredDocumentation",
-              "src": "422:66:59",
+              "src": "422:66:55",
               "text": " @dev Returns whether the bit at `index` is set."
             },
-            "id": 9446,
+            "id": 7728,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "get",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9417,
+              "id": 7699,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9414,
+                  "id": 7696,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "506:21:59",
+                  "scope": 7728,
+                  "src": "506:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9413,
+                    "id": 7695,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9412,
+                      "id": 7694,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "506:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "506:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "506:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "506:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -503,12 +503,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9416,
+                  "id": 7698,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "529:13:59",
+                  "scope": 7728,
+                  "src": "529:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -516,10 +516,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9415,
+                    "id": 7697,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "529:7:59",
+                    "src": "529:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -528,20 +528,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "505:38:59"
+              "src": "505:38:55"
             },
             "returnParameters": {
-              "id": 9420,
+              "id": 7702,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9419,
+                  "id": 7701,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "567:4:59",
+                  "scope": 7728,
+                  "src": "567:4:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -549,10 +549,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 9418,
+                    "id": 7700,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "567:4:59",
+                    "src": "567:4:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -561,60 +561,60 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "566:6:59"
+              "src": "566:6:55"
             },
-            "scope": 9540,
-            "src": "493:217:59",
+            "scope": 7822,
+            "src": "493:217:55",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9471,
+              "id": 7753,
               "nodeType": "Block",
-              "src": "896:121:59",
+              "src": "896:121:55",
               "statements": [
                 {
                   "condition": {
-                    "id": 9457,
+                    "id": 7739,
                     "name": "value",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 9454,
-                    "src": "910:5:59",
+                    "referencedDeclaration": 7736,
+                    "src": "910:5:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
                   "falseBody": {
-                    "id": 9469,
+                    "id": 7751,
                     "nodeType": "Block",
-                    "src": "966:45:59",
+                    "src": "966:45:55",
                     "statements": [
                       {
                         "expression": {
                           "arguments": [
                             {
-                              "id": 9465,
+                              "id": 7747,
                               "name": "bitmap",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9450,
-                              "src": "986:6:59",
+                              "referencedDeclaration": 7732,
+                              "src": "986:6:55",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               }
                             },
                             {
-                              "id": 9466,
+                              "id": 7748,
                               "name": "index",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9452,
-                              "src": "994:5:59",
+                              "referencedDeclaration": 7734,
+                              "src": "994:5:55",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -624,7 +624,7 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               },
                               {
@@ -632,18 +632,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 9464,
+                            "id": 7746,
                             "name": "unset",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9539,
-                            "src": "980:5:59",
+                            "referencedDeclaration": 7821,
+                            "src": "980:5:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$9410_storage_ptr_$_t_uint256_$returns$__$",
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$7692_storage_ptr_$_t_uint256_$returns$__$",
                               "typeString": "function (struct BitMaps.BitMap storage pointer,uint256)"
                             }
                           },
-                          "id": 9467,
+                          "id": 7749,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -651,49 +651,49 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "980:20:59",
+                          "src": "980:20:55",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 9468,
+                        "id": 7750,
                         "nodeType": "ExpressionStatement",
-                        "src": "980:20:59"
+                        "src": "980:20:55"
                       }
                     ]
                   },
-                  "id": 9470,
+                  "id": 7752,
                   "nodeType": "IfStatement",
-                  "src": "906:105:59",
+                  "src": "906:105:55",
                   "trueBody": {
-                    "id": 9463,
+                    "id": 7745,
                     "nodeType": "Block",
-                    "src": "917:43:59",
+                    "src": "917:43:55",
                     "statements": [
                       {
                         "expression": {
                           "arguments": [
                             {
-                              "id": 9459,
+                              "id": 7741,
                               "name": "bitmap",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9450,
-                              "src": "935:6:59",
+                              "referencedDeclaration": 7732,
+                              "src": "935:6:55",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               }
                             },
                             {
-                              "id": 9460,
+                              "id": 7742,
                               "name": "index",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9452,
-                              "src": "943:5:59",
+                              "referencedDeclaration": 7734,
+                              "src": "943:5:55",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -703,7 +703,7 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               },
                               {
@@ -711,18 +711,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 9458,
+                            "id": 7740,
                             "name": "set",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9505,
-                            "src": "931:3:59",
+                            "referencedDeclaration": 7787,
+                            "src": "931:3:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$9410_storage_ptr_$_t_uint256_$returns$__$",
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$7692_storage_ptr_$_t_uint256_$returns$__$",
                               "typeString": "function (struct BitMaps.BitMap storage pointer,uint256)"
                             }
                           },
-                          "id": 9461,
+                          "id": 7743,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -730,16 +730,16 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "931:18:59",
+                          "src": "931:18:55",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 9462,
+                        "id": 7744,
                         "nodeType": "ExpressionStatement",
-                        "src": "931:18:59"
+                        "src": "931:18:55"
                       }
                     ]
                   }
@@ -747,49 +747,49 @@
               ]
             },
             "documentation": {
-              "id": 9447,
+              "id": 7729,
               "nodeType": "StructuredDocumentation",
-              "src": "716:71:59",
+              "src": "716:71:55",
               "text": " @dev Sets the bit at `index` to the boolean `value`."
             },
-            "id": 9472,
+            "id": 7754,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "setTo",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9455,
+              "id": 7737,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9450,
+                  "id": 7732,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "816:21:59",
+                  "scope": 7754,
+                  "src": "816:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9449,
+                    "id": 7731,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9448,
+                      "id": 7730,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "816:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "816:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "816:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "816:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -797,12 +797,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9452,
+                  "id": 7734,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "847:13:59",
+                  "scope": 7754,
+                  "src": "847:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -810,10 +810,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9451,
+                    "id": 7733,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "847:7:59",
+                    "src": "847:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -823,12 +823,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9454,
+                  "id": 7736,
                   "mutability": "mutable",
                   "name": "value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "870:10:59",
+                  "scope": 7754,
+                  "src": "870:10:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -836,10 +836,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 9453,
+                    "id": 7735,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "870:4:59",
+                    "src": "870:4:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -848,39 +848,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "806:80:59"
+              "src": "806:80:55"
             },
             "returnParameters": {
-              "id": 9456,
+              "id": 7738,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "896:0:59"
+              "src": "896:0:55"
             },
-            "scope": 9540,
-            "src": "792:225:59",
+            "scope": 7822,
+            "src": "792:225:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9504,
+              "id": 7786,
               "nodeType": "Block",
-              "src": "1136:126:59",
+              "src": "1136:126:55",
               "statements": [
                 {
                   "assignments": [
-                    9482
+                    7764
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9482,
+                      "id": 7764,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9504,
-                      "src": "1146:14:59",
+                      "scope": 7786,
+                      "src": "1146:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -888,10 +888,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9481,
+                        "id": 7763,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1146:7:59",
+                        "src": "1146:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -900,24 +900,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9486,
+                  "id": 7768,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9485,
+                    "id": 7767,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9483,
+                      "id": 7765,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9478,
-                      "src": "1163:5:59",
+                      "referencedDeclaration": 7760,
+                      "src": "1163:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -927,42 +927,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9484,
+                      "id": 7766,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1171:3:59",
+                      "src": "1171:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "1163:11:59",
+                    "src": "1163:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1146:28:59"
+                  "src": "1146:28:55"
                 },
                 {
                   "assignments": [
-                    9488
+                    7770
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9488,
+                      "id": 7770,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9504,
-                      "src": "1184:12:59",
+                      "scope": 7786,
+                      "src": "1184:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -970,10 +970,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9487,
+                        "id": 7769,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1184:7:59",
+                        "src": "1184:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -982,27 +982,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9495,
+                  "id": 7777,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9494,
+                    "id": 7776,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9489,
+                      "id": 7771,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1199:1:59",
+                      "src": "1199:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -1018,18 +1018,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9492,
+                          "id": 7774,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9490,
+                            "id": 7772,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9478,
-                            "src": "1205:5:59",
+                            "referencedDeclaration": 7760,
+                            "src": "1205:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -1039,52 +1039,52 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9491,
+                            "id": 7773,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1213:3:59",
+                            "src": "1213:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "1205:11:59",
+                          "src": "1205:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9493,
+                      "id": 7775,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "1204:13:59",
+                      "src": "1204:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1199:18:59",
+                    "src": "1199:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1184:33:59"
+                  "src": "1184:33:55"
                 },
                 {
                   "expression": {
-                    "id": 9502,
+                    "id": 7784,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1092,39 +1092,39 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "expression": {
-                          "id": 9496,
+                          "id": 7778,
                           "name": "bitmap",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9476,
-                          "src": "1227:6:59",
+                          "referencedDeclaration": 7758,
+                          "src": "1227:6:55",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                            "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                             "typeString": "struct BitMaps.BitMap storage pointer"
                           }
                         },
-                        "id": 9499,
+                        "id": 7781,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "_data",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 9409,
-                        "src": "1227:12:59",
+                        "referencedDeclaration": 7691,
+                        "src": "1227:12:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                           "typeString": "mapping(uint256 => uint256)"
                         }
                       },
-                      "id": 9500,
+                      "id": 7782,
                       "indexExpression": {
-                        "id": 9498,
+                        "id": 7780,
                         "name": "bucket",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9482,
-                        "src": "1240:6:59",
+                        "referencedDeclaration": 7764,
+                        "src": "1240:6:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1135,7 +1135,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1227:20:59",
+                      "src": "1227:20:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1144,73 +1144,73 @@
                     "nodeType": "Assignment",
                     "operator": "|=",
                     "rightHandSide": {
-                      "id": 9501,
+                      "id": 7783,
                       "name": "mask",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9488,
-                      "src": "1251:4:59",
+                      "referencedDeclaration": 7770,
+                      "src": "1251:4:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1227:28:59",
+                    "src": "1227:28:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 9503,
+                  "id": 7785,
                   "nodeType": "ExpressionStatement",
-                  "src": "1227:28:59"
+                  "src": "1227:28:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9473,
+              "id": 7755,
               "nodeType": "StructuredDocumentation",
-              "src": "1023:48:59",
+              "src": "1023:48:55",
               "text": " @dev Sets the bit at `index`."
             },
-            "id": 9505,
+            "id": 7787,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "set",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9479,
+              "id": 7761,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9476,
+                  "id": 7758,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9505,
-                  "src": "1089:21:59",
+                  "scope": 7787,
+                  "src": "1089:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9475,
+                    "id": 7757,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9474,
+                      "id": 7756,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "1089:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "1089:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "1089:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "1089:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -1218,12 +1218,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9478,
+                  "id": 7760,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9505,
-                  "src": "1112:13:59",
+                  "scope": 7787,
+                  "src": "1112:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1231,10 +1231,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9477,
+                    "id": 7759,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1112:7:59",
+                    "src": "1112:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1243,39 +1243,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1088:38:59"
+              "src": "1088:38:55"
             },
             "returnParameters": {
-              "id": 9480,
+              "id": 7762,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1136:0:59"
+              "src": "1136:0:55"
             },
-            "scope": 9540,
-            "src": "1076:186:59",
+            "scope": 7822,
+            "src": "1076:186:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9538,
+              "id": 7820,
               "nodeType": "Block",
-              "src": "1385:127:59",
+              "src": "1385:127:55",
               "statements": [
                 {
                   "assignments": [
-                    9515
+                    7797
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9515,
+                      "id": 7797,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9538,
-                      "src": "1395:14:59",
+                      "scope": 7820,
+                      "src": "1395:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1283,10 +1283,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9514,
+                        "id": 7796,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1395:7:59",
+                        "src": "1395:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1295,24 +1295,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9519,
+                  "id": 7801,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9518,
+                    "id": 7800,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9516,
+                      "id": 7798,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9511,
-                      "src": "1412:5:59",
+                      "referencedDeclaration": 7793,
+                      "src": "1412:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1322,42 +1322,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9517,
+                      "id": 7799,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1420:3:59",
+                      "src": "1420:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "1412:11:59",
+                    "src": "1412:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1395:28:59"
+                  "src": "1395:28:55"
                 },
                 {
                   "assignments": [
-                    9521
+                    7803
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9521,
+                      "id": 7803,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9538,
-                      "src": "1433:12:59",
+                      "scope": 7820,
+                      "src": "1433:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1365,10 +1365,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9520,
+                        "id": 7802,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1433:7:59",
+                        "src": "1433:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1377,27 +1377,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9528,
+                  "id": 7810,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9527,
+                    "id": 7809,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9522,
+                      "id": 7804,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1448:1:59",
+                      "src": "1448:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -1413,18 +1413,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9525,
+                          "id": 7807,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9523,
+                            "id": 7805,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9511,
-                            "src": "1454:5:59",
+                            "referencedDeclaration": 7793,
+                            "src": "1454:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -1434,52 +1434,52 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9524,
+                            "id": 7806,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1462:3:59",
+                            "src": "1462:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "1454:11:59",
+                          "src": "1454:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9526,
+                      "id": 7808,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "1453:13:59",
+                      "src": "1453:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1448:18:59",
+                    "src": "1448:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1433:33:59"
+                  "src": "1433:33:55"
                 },
                 {
                   "expression": {
-                    "id": 9536,
+                    "id": 7818,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1487,39 +1487,39 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "expression": {
-                          "id": 9529,
+                          "id": 7811,
                           "name": "bitmap",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9509,
-                          "src": "1476:6:59",
+                          "referencedDeclaration": 7791,
+                          "src": "1476:6:55",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                            "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                             "typeString": "struct BitMaps.BitMap storage pointer"
                           }
                         },
-                        "id": 9532,
+                        "id": 7814,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "_data",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 9409,
-                        "src": "1476:12:59",
+                        "referencedDeclaration": 7691,
+                        "src": "1476:12:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                           "typeString": "mapping(uint256 => uint256)"
                         }
                       },
-                      "id": 9533,
+                      "id": 7815,
                       "indexExpression": {
-                        "id": 9531,
+                        "id": 7813,
                         "name": "bucket",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9515,
-                        "src": "1489:6:59",
+                        "referencedDeclaration": 7797,
+                        "src": "1489:6:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1530,7 +1530,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1476:20:59",
+                      "src": "1476:20:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1539,7 +1539,7 @@
                     "nodeType": "Assignment",
                     "operator": "&=",
                     "rightHandSide": {
-                      "id": 9535,
+                      "id": 7817,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1547,14 +1547,14 @@
                       "nodeType": "UnaryOperation",
                       "operator": "~",
                       "prefix": true,
-                      "src": "1500:5:59",
+                      "src": "1500:5:55",
                       "subExpression": {
-                        "id": 9534,
+                        "id": 7816,
                         "name": "mask",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9521,
-                        "src": "1501:4:59",
+                        "referencedDeclaration": 7803,
+                        "src": "1501:4:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1565,62 +1565,62 @@
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1476:29:59",
+                    "src": "1476:29:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 9537,
+                  "id": 7819,
                   "nodeType": "ExpressionStatement",
-                  "src": "1476:29:59"
+                  "src": "1476:29:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9506,
+              "id": 7788,
               "nodeType": "StructuredDocumentation",
-              "src": "1268:50:59",
+              "src": "1268:50:55",
               "text": " @dev Unsets the bit at `index`."
             },
-            "id": 9539,
+            "id": 7821,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "unset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9512,
+              "id": 7794,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9509,
+                  "id": 7791,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9539,
-                  "src": "1338:21:59",
+                  "scope": 7821,
+                  "src": "1338:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9508,
+                    "id": 7790,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9507,
+                      "id": 7789,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "1338:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "1338:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "1338:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "1338:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -1628,12 +1628,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9511,
+                  "id": 7793,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9539,
-                  "src": "1361:13:59",
+                  "scope": 7821,
+                  "src": "1361:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1641,10 +1641,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9510,
+                    "id": 7792,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1361:7:59",
+                    "src": "1361:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1653,40 +1653,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1337:38:59"
+              "src": "1337:38:55"
             },
             "returnParameters": {
-              "id": 9513,
+              "id": 7795,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1385:0:59"
+              "src": "1385:0:55"
             },
-            "scope": 9540,
-            "src": "1323:189:59",
+            "scope": 7822,
+            "src": "1323:189:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 9541,
-        "src": "330:1184:59"
+        "scope": 7823,
+        "src": "330:1184:55"
       }
     ],
-    "src": "32:1483:59"
+    "src": "32:1483:55"
   },
   "legacyAST": {
-    "absolutePath": "/Volumes/Transcend/Projects/DappsLab/Lottery-Smart-Contract/contracts/customERC20ERC721/utils/structs/BitMaps.sol",
+    "absolutePath": "project:/contracts/customERC20ERC721/utils/structs/BitMaps.sol",
     "exportedSymbols": {
       "BitMaps": [
-        9540
+        7822
       ]
     },
-    "id": 9541,
+    "id": 7823,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 9404,
+        "id": 7686,
         "literals": [
           "solidity",
           "^",
@@ -1694,7 +1694,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:23:59"
+        "src": "32:23:55"
       },
       {
         "abstract": false,
@@ -1702,31 +1702,31 @@
         "contractDependencies": [],
         "contractKind": "library",
         "documentation": {
-          "id": 9405,
+          "id": 7687,
           "nodeType": "StructuredDocumentation",
-          "src": "57:272:59",
+          "src": "57:272:55",
           "text": " @dev Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential.\n Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor]."
         },
         "fullyImplemented": true,
-        "id": 9540,
+        "id": 7822,
         "linearizedBaseContracts": [
-          9540
+          7822
         ],
         "name": "BitMaps",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "BitMaps.BitMap",
-            "id": 9410,
+            "id": 7692,
             "members": [
               {
                 "constant": false,
-                "id": 9409,
+                "id": 7691,
                 "mutability": "mutable",
                 "name": "_data",
                 "nodeType": "VariableDeclaration",
-                "scope": 9410,
-                "src": "376:33:59",
+                "scope": 7692,
+                "src": "376:33:55",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1734,28 +1734,28 @@
                   "typeString": "mapping(uint256 => uint256)"
                 },
                 "typeName": {
-                  "id": 9408,
+                  "id": 7690,
                   "keyType": {
-                    "id": 9406,
+                    "id": 7688,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "384:7:59",
+                    "src": "384:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "376:27:59",
+                  "src": "376:27:55",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                     "typeString": "mapping(uint256 => uint256)"
                   },
                   "valueType": {
-                    "id": 9407,
+                    "id": 7689,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "395:7:59",
+                    "src": "395:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1767,29 +1767,29 @@
             ],
             "name": "BitMap",
             "nodeType": "StructDefinition",
-            "scope": 9540,
-            "src": "352:64:59",
+            "scope": 7822,
+            "src": "352:64:55",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 9445,
+              "id": 7727,
               "nodeType": "Block",
-              "src": "573:137:59",
+              "src": "573:137:55",
               "statements": [
                 {
                   "assignments": [
-                    9422
+                    7704
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9422,
+                      "id": 7704,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9445,
-                      "src": "583:14:59",
+                      "scope": 7727,
+                      "src": "583:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1797,10 +1797,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9421,
+                        "id": 7703,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "583:7:59",
+                        "src": "583:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1809,24 +1809,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9426,
+                  "id": 7708,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9425,
+                    "id": 7707,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9423,
+                      "id": 7705,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9416,
-                      "src": "600:5:59",
+                      "referencedDeclaration": 7698,
+                      "src": "600:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1836,42 +1836,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9424,
+                      "id": 7706,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "608:3:59",
+                      "src": "608:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "600:11:59",
+                    "src": "600:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "583:28:59"
+                  "src": "583:28:55"
                 },
                 {
                   "assignments": [
-                    9428
+                    7710
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9428,
+                      "id": 7710,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9445,
-                      "src": "621:12:59",
+                      "scope": 7727,
+                      "src": "621:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1879,10 +1879,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9427,
+                        "id": 7709,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "621:7:59",
+                        "src": "621:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1891,27 +1891,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9435,
+                  "id": 7717,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9434,
+                    "id": 7716,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9429,
+                      "id": 7711,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "636:1:59",
+                      "src": "636:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -1927,18 +1927,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9432,
+                          "id": 7714,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9430,
+                            "id": 7712,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9416,
-                            "src": "642:5:59",
+                            "referencedDeclaration": 7698,
+                            "src": "642:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -1948,48 +1948,48 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9431,
+                            "id": 7713,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "650:3:59",
+                            "src": "650:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "642:11:59",
+                          "src": "642:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9433,
+                      "id": 7715,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "641:13:59",
+                      "src": "641:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "636:18:59",
+                    "src": "636:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "621:33:59"
+                  "src": "621:33:55"
                 },
                 {
                   "expression": {
@@ -1997,7 +1997,7 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9443,
+                    "id": 7725,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2007,7 +2007,7 @@
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 9441,
+                      "id": 7723,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2015,39 +2015,39 @@
                       "leftExpression": {
                         "baseExpression": {
                           "expression": {
-                            "id": 9436,
+                            "id": 7718,
                             "name": "bitmap",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9414,
-                            "src": "671:6:59",
+                            "referencedDeclaration": 7696,
+                            "src": "671:6:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                              "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                               "typeString": "struct BitMaps.BitMap storage pointer"
                             }
                           },
-                          "id": 9437,
+                          "id": 7719,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "_data",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 9409,
-                          "src": "671:12:59",
+                          "referencedDeclaration": 7691,
+                          "src": "671:12:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                             "typeString": "mapping(uint256 => uint256)"
                           }
                         },
-                        "id": 9439,
+                        "id": 7721,
                         "indexExpression": {
-                          "id": 9438,
+                          "id": 7720,
                           "name": "bucket",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9422,
-                          "src": "684:6:59",
+                          "referencedDeclaration": 7704,
+                          "src": "684:6:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -2058,7 +2058,7 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "671:20:59",
+                        "src": "671:20:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2067,18 +2067,18 @@
                       "nodeType": "BinaryOperation",
                       "operator": "&",
                       "rightExpression": {
-                        "id": 9440,
+                        "id": 7722,
                         "name": "mask",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9428,
-                        "src": "694:4:59",
+                        "referencedDeclaration": 7710,
+                        "src": "694:4:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "src": "671:27:59",
+                      "src": "671:27:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2088,77 +2088,77 @@
                     "operator": "!=",
                     "rightExpression": {
                       "hexValue": "30",
-                      "id": 9442,
+                      "id": 7724,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "702:1:59",
+                      "src": "702:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "671:32:59",
+                    "src": "671:32:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 9420,
-                  "id": 9444,
+                  "functionReturnParameters": 7702,
+                  "id": 7726,
                   "nodeType": "Return",
-                  "src": "664:39:59"
+                  "src": "664:39:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9411,
+              "id": 7693,
               "nodeType": "StructuredDocumentation",
-              "src": "422:66:59",
+              "src": "422:66:55",
               "text": " @dev Returns whether the bit at `index` is set."
             },
-            "id": 9446,
+            "id": 7728,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "get",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9417,
+              "id": 7699,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9414,
+                  "id": 7696,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "506:21:59",
+                  "scope": 7728,
+                  "src": "506:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9413,
+                    "id": 7695,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9412,
+                      "id": 7694,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "506:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "506:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "506:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "506:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -2166,12 +2166,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9416,
+                  "id": 7698,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "529:13:59",
+                  "scope": 7728,
+                  "src": "529:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2179,10 +2179,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9415,
+                    "id": 7697,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "529:7:59",
+                    "src": "529:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2191,20 +2191,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "505:38:59"
+              "src": "505:38:55"
             },
             "returnParameters": {
-              "id": 9420,
+              "id": 7702,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9419,
+                  "id": 7701,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9446,
-                  "src": "567:4:59",
+                  "scope": 7728,
+                  "src": "567:4:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2212,10 +2212,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 9418,
+                    "id": 7700,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "567:4:59",
+                    "src": "567:4:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -2224,60 +2224,60 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "566:6:59"
+              "src": "566:6:55"
             },
-            "scope": 9540,
-            "src": "493:217:59",
+            "scope": 7822,
+            "src": "493:217:55",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9471,
+              "id": 7753,
               "nodeType": "Block",
-              "src": "896:121:59",
+              "src": "896:121:55",
               "statements": [
                 {
                   "condition": {
-                    "id": 9457,
+                    "id": 7739,
                     "name": "value",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 9454,
-                    "src": "910:5:59",
+                    "referencedDeclaration": 7736,
+                    "src": "910:5:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
                   "falseBody": {
-                    "id": 9469,
+                    "id": 7751,
                     "nodeType": "Block",
-                    "src": "966:45:59",
+                    "src": "966:45:55",
                     "statements": [
                       {
                         "expression": {
                           "arguments": [
                             {
-                              "id": 9465,
+                              "id": 7747,
                               "name": "bitmap",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9450,
-                              "src": "986:6:59",
+                              "referencedDeclaration": 7732,
+                              "src": "986:6:55",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               }
                             },
                             {
-                              "id": 9466,
+                              "id": 7748,
                               "name": "index",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9452,
-                              "src": "994:5:59",
+                              "referencedDeclaration": 7734,
+                              "src": "994:5:55",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -2287,7 +2287,7 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               },
                               {
@@ -2295,18 +2295,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 9464,
+                            "id": 7746,
                             "name": "unset",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9539,
-                            "src": "980:5:59",
+                            "referencedDeclaration": 7821,
+                            "src": "980:5:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$9410_storage_ptr_$_t_uint256_$returns$__$",
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$7692_storage_ptr_$_t_uint256_$returns$__$",
                               "typeString": "function (struct BitMaps.BitMap storage pointer,uint256)"
                             }
                           },
-                          "id": 9467,
+                          "id": 7749,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2314,49 +2314,49 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "980:20:59",
+                          "src": "980:20:55",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 9468,
+                        "id": 7750,
                         "nodeType": "ExpressionStatement",
-                        "src": "980:20:59"
+                        "src": "980:20:55"
                       }
                     ]
                   },
-                  "id": 9470,
+                  "id": 7752,
                   "nodeType": "IfStatement",
-                  "src": "906:105:59",
+                  "src": "906:105:55",
                   "trueBody": {
-                    "id": 9463,
+                    "id": 7745,
                     "nodeType": "Block",
-                    "src": "917:43:59",
+                    "src": "917:43:55",
                     "statements": [
                       {
                         "expression": {
                           "arguments": [
                             {
-                              "id": 9459,
+                              "id": 7741,
                               "name": "bitmap",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9450,
-                              "src": "935:6:59",
+                              "referencedDeclaration": 7732,
+                              "src": "935:6:55",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               }
                             },
                             {
-                              "id": 9460,
+                              "id": 7742,
                               "name": "index",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 9452,
-                              "src": "943:5:59",
+                              "referencedDeclaration": 7734,
+                              "src": "943:5:55",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -2366,7 +2366,7 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                                "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                                 "typeString": "struct BitMaps.BitMap storage pointer"
                               },
                               {
@@ -2374,18 +2374,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 9458,
+                            "id": 7740,
                             "name": "set",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9505,
-                            "src": "931:3:59",
+                            "referencedDeclaration": 7787,
+                            "src": "931:3:55",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$9410_storage_ptr_$_t_uint256_$returns$__$",
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_BitMap_$7692_storage_ptr_$_t_uint256_$returns$__$",
                               "typeString": "function (struct BitMaps.BitMap storage pointer,uint256)"
                             }
                           },
-                          "id": 9461,
+                          "id": 7743,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2393,16 +2393,16 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "931:18:59",
+                          "src": "931:18:55",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 9462,
+                        "id": 7744,
                         "nodeType": "ExpressionStatement",
-                        "src": "931:18:59"
+                        "src": "931:18:55"
                       }
                     ]
                   }
@@ -2410,49 +2410,49 @@
               ]
             },
             "documentation": {
-              "id": 9447,
+              "id": 7729,
               "nodeType": "StructuredDocumentation",
-              "src": "716:71:59",
+              "src": "716:71:55",
               "text": " @dev Sets the bit at `index` to the boolean `value`."
             },
-            "id": 9472,
+            "id": 7754,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "setTo",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9455,
+              "id": 7737,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9450,
+                  "id": 7732,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "816:21:59",
+                  "scope": 7754,
+                  "src": "816:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9449,
+                    "id": 7731,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9448,
+                      "id": 7730,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "816:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "816:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "816:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "816:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -2460,12 +2460,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9452,
+                  "id": 7734,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "847:13:59",
+                  "scope": 7754,
+                  "src": "847:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2473,10 +2473,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9451,
+                    "id": 7733,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "847:7:59",
+                    "src": "847:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2486,12 +2486,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9454,
+                  "id": 7736,
                   "mutability": "mutable",
                   "name": "value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9472,
-                  "src": "870:10:59",
+                  "scope": 7754,
+                  "src": "870:10:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2499,10 +2499,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 9453,
+                    "id": 7735,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "870:4:59",
+                    "src": "870:4:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -2511,39 +2511,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "806:80:59"
+              "src": "806:80:55"
             },
             "returnParameters": {
-              "id": 9456,
+              "id": 7738,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "896:0:59"
+              "src": "896:0:55"
             },
-            "scope": 9540,
-            "src": "792:225:59",
+            "scope": 7822,
+            "src": "792:225:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9504,
+              "id": 7786,
               "nodeType": "Block",
-              "src": "1136:126:59",
+              "src": "1136:126:55",
               "statements": [
                 {
                   "assignments": [
-                    9482
+                    7764
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9482,
+                      "id": 7764,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9504,
-                      "src": "1146:14:59",
+                      "scope": 7786,
+                      "src": "1146:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2551,10 +2551,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9481,
+                        "id": 7763,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1146:7:59",
+                        "src": "1146:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2563,24 +2563,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9486,
+                  "id": 7768,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9485,
+                    "id": 7767,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9483,
+                      "id": 7765,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9478,
-                      "src": "1163:5:59",
+                      "referencedDeclaration": 7760,
+                      "src": "1163:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2590,42 +2590,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9484,
+                      "id": 7766,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1171:3:59",
+                      "src": "1171:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "1163:11:59",
+                    "src": "1163:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1146:28:59"
+                  "src": "1146:28:55"
                 },
                 {
                   "assignments": [
-                    9488
+                    7770
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9488,
+                      "id": 7770,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9504,
-                      "src": "1184:12:59",
+                      "scope": 7786,
+                      "src": "1184:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2633,10 +2633,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9487,
+                        "id": 7769,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1184:7:59",
+                        "src": "1184:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2645,27 +2645,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9495,
+                  "id": 7777,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9494,
+                    "id": 7776,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9489,
+                      "id": 7771,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1199:1:59",
+                      "src": "1199:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -2681,18 +2681,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9492,
+                          "id": 7774,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9490,
+                            "id": 7772,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9478,
-                            "src": "1205:5:59",
+                            "referencedDeclaration": 7760,
+                            "src": "1205:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -2702,52 +2702,52 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9491,
+                            "id": 7773,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1213:3:59",
+                            "src": "1213:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "1205:11:59",
+                          "src": "1205:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9493,
+                      "id": 7775,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "1204:13:59",
+                      "src": "1204:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1199:18:59",
+                    "src": "1199:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1184:33:59"
+                  "src": "1184:33:55"
                 },
                 {
                   "expression": {
-                    "id": 9502,
+                    "id": 7784,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2755,39 +2755,39 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "expression": {
-                          "id": 9496,
+                          "id": 7778,
                           "name": "bitmap",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9476,
-                          "src": "1227:6:59",
+                          "referencedDeclaration": 7758,
+                          "src": "1227:6:55",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                            "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                             "typeString": "struct BitMaps.BitMap storage pointer"
                           }
                         },
-                        "id": 9499,
+                        "id": 7781,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "_data",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 9409,
-                        "src": "1227:12:59",
+                        "referencedDeclaration": 7691,
+                        "src": "1227:12:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                           "typeString": "mapping(uint256 => uint256)"
                         }
                       },
-                      "id": 9500,
+                      "id": 7782,
                       "indexExpression": {
-                        "id": 9498,
+                        "id": 7780,
                         "name": "bucket",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9482,
-                        "src": "1240:6:59",
+                        "referencedDeclaration": 7764,
+                        "src": "1240:6:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2798,7 +2798,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1227:20:59",
+                      "src": "1227:20:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2807,73 +2807,73 @@
                     "nodeType": "Assignment",
                     "operator": "|=",
                     "rightHandSide": {
-                      "id": 9501,
+                      "id": 7783,
                       "name": "mask",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9488,
-                      "src": "1251:4:59",
+                      "referencedDeclaration": 7770,
+                      "src": "1251:4:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1227:28:59",
+                    "src": "1227:28:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 9503,
+                  "id": 7785,
                   "nodeType": "ExpressionStatement",
-                  "src": "1227:28:59"
+                  "src": "1227:28:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9473,
+              "id": 7755,
               "nodeType": "StructuredDocumentation",
-              "src": "1023:48:59",
+              "src": "1023:48:55",
               "text": " @dev Sets the bit at `index`."
             },
-            "id": 9505,
+            "id": 7787,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "set",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9479,
+              "id": 7761,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9476,
+                  "id": 7758,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9505,
-                  "src": "1089:21:59",
+                  "scope": 7787,
+                  "src": "1089:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9475,
+                    "id": 7757,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9474,
+                      "id": 7756,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "1089:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "1089:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "1089:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "1089:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -2881,12 +2881,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9478,
+                  "id": 7760,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9505,
-                  "src": "1112:13:59",
+                  "scope": 7787,
+                  "src": "1112:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2894,10 +2894,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9477,
+                    "id": 7759,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1112:7:59",
+                    "src": "1112:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2906,39 +2906,39 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1088:38:59"
+              "src": "1088:38:55"
             },
             "returnParameters": {
-              "id": 9480,
+              "id": 7762,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1136:0:59"
+              "src": "1136:0:55"
             },
-            "scope": 9540,
-            "src": "1076:186:59",
+            "scope": 7822,
+            "src": "1076:186:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 9538,
+              "id": 7820,
               "nodeType": "Block",
-              "src": "1385:127:59",
+              "src": "1385:127:55",
               "statements": [
                 {
                   "assignments": [
-                    9515
+                    7797
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9515,
+                      "id": 7797,
                       "mutability": "mutable",
                       "name": "bucket",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9538,
-                      "src": "1395:14:59",
+                      "scope": 7820,
+                      "src": "1395:14:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2946,10 +2946,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9514,
+                        "id": 7796,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1395:7:59",
+                        "src": "1395:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2958,24 +2958,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9519,
+                  "id": 7801,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9518,
+                    "id": 7800,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
-                      "id": 9516,
+                      "id": 7798,
                       "name": "index",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 9511,
-                      "src": "1412:5:59",
+                      "referencedDeclaration": 7793,
+                      "src": "1412:5:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2985,42 +2985,42 @@
                     "operator": "/",
                     "rightExpression": {
                       "hexValue": "323536",
-                      "id": 9517,
+                      "id": 7799,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1420:3:59",
+                      "src": "1420:3:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_256_by_1",
                         "typeString": "int_const 256"
                       },
                       "value": "256"
                     },
-                    "src": "1412:11:59",
+                    "src": "1412:11:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1395:28:59"
+                  "src": "1395:28:55"
                 },
                 {
                   "assignments": [
-                    9521
+                    7803
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 9521,
+                      "id": 7803,
                       "mutability": "mutable",
                       "name": "mask",
                       "nodeType": "VariableDeclaration",
-                      "scope": 9538,
-                      "src": "1433:12:59",
+                      "scope": 7820,
+                      "src": "1433:12:55",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -3028,10 +3028,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 9520,
+                        "id": 7802,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1433:7:59",
+                        "src": "1433:7:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -3040,27 +3040,27 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 9528,
+                  "id": 7810,
                   "initialValue": {
                     "commonType": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 9527,
+                    "id": 7809,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "hexValue": "31",
-                      "id": 9522,
+                      "id": 7804,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1448:1:59",
+                      "src": "1448:1:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
@@ -3076,18 +3076,18 @@
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           },
-                          "id": 9525,
+                          "id": 7807,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
-                            "id": 9523,
+                            "id": 7805,
                             "name": "index",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 9511,
-                            "src": "1454:5:59",
+                            "referencedDeclaration": 7793,
+                            "src": "1454:5:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -3097,52 +3097,52 @@
                           "operator": "%",
                           "rightExpression": {
                             "hexValue": "323536",
-                            "id": 9524,
+                            "id": 7806,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1462:3:59",
+                            "src": "1462:3:55",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
                             },
                             "value": "256"
                           },
-                          "src": "1454:11:59",
+                          "src": "1454:11:55",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         }
                       ],
-                      "id": 9526,
+                      "id": 7808,
                       "isConstant": false,
                       "isInlineArray": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "TupleExpression",
-                      "src": "1453:13:59",
+                      "src": "1453:13:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1448:18:59",
+                    "src": "1448:18:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1433:33:59"
+                  "src": "1433:33:55"
                 },
                 {
                   "expression": {
-                    "id": 9536,
+                    "id": 7818,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3150,39 +3150,39 @@
                     "leftHandSide": {
                       "baseExpression": {
                         "expression": {
-                          "id": 9529,
+                          "id": 7811,
                           "name": "bitmap",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 9509,
-                          "src": "1476:6:59",
+                          "referencedDeclaration": 7791,
+                          "src": "1476:6:55",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                            "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                             "typeString": "struct BitMaps.BitMap storage pointer"
                           }
                         },
-                        "id": 9532,
+                        "id": 7814,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "_data",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 9409,
-                        "src": "1476:12:59",
+                        "referencedDeclaration": 7691,
+                        "src": "1476:12:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_uint256_$_t_uint256_$",
                           "typeString": "mapping(uint256 => uint256)"
                         }
                       },
-                      "id": 9533,
+                      "id": 7815,
                       "indexExpression": {
-                        "id": 9531,
+                        "id": 7813,
                         "name": "bucket",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9515,
-                        "src": "1489:6:59",
+                        "referencedDeclaration": 7797,
+                        "src": "1489:6:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -3193,7 +3193,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1476:20:59",
+                      "src": "1476:20:55",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -3202,7 +3202,7 @@
                     "nodeType": "Assignment",
                     "operator": "&=",
                     "rightHandSide": {
-                      "id": 9535,
+                      "id": 7817,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3210,14 +3210,14 @@
                       "nodeType": "UnaryOperation",
                       "operator": "~",
                       "prefix": true,
-                      "src": "1500:5:59",
+                      "src": "1500:5:55",
                       "subExpression": {
-                        "id": 9534,
+                        "id": 7816,
                         "name": "mask",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 9521,
-                        "src": "1501:4:59",
+                        "referencedDeclaration": 7803,
+                        "src": "1501:4:55",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -3228,62 +3228,62 @@
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1476:29:59",
+                    "src": "1476:29:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 9537,
+                  "id": 7819,
                   "nodeType": "ExpressionStatement",
-                  "src": "1476:29:59"
+                  "src": "1476:29:55"
                 }
               ]
             },
             "documentation": {
-              "id": 9506,
+              "id": 7788,
               "nodeType": "StructuredDocumentation",
-              "src": "1268:50:59",
+              "src": "1268:50:55",
               "text": " @dev Unsets the bit at `index`."
             },
-            "id": 9539,
+            "id": 7821,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "unset",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 9512,
+              "id": 7794,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 9509,
+                  "id": 7791,
                   "mutability": "mutable",
                   "name": "bitmap",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9539,
-                  "src": "1338:21:59",
+                  "scope": 7821,
+                  "src": "1338:21:55",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                    "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                     "typeString": "struct BitMaps.BitMap"
                   },
                   "typeName": {
-                    "id": 9508,
+                    "id": 7790,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 9507,
+                      "id": 7789,
                       "name": "BitMap",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 9410,
-                      "src": "1338:6:59"
+                      "referencedDeclaration": 7692,
+                      "src": "1338:6:55"
                     },
-                    "referencedDeclaration": 9410,
-                    "src": "1338:6:59",
+                    "referencedDeclaration": 7692,
+                    "src": "1338:6:55",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_BitMap_$9410_storage_ptr",
+                      "typeIdentifier": "t_struct$_BitMap_$7692_storage_ptr",
                       "typeString": "struct BitMaps.BitMap"
                     }
                   },
@@ -3291,12 +3291,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 9511,
+                  "id": 7793,
                   "mutability": "mutable",
                   "name": "index",
                   "nodeType": "VariableDeclaration",
-                  "scope": 9539,
-                  "src": "1361:13:59",
+                  "scope": 7821,
+                  "src": "1361:13:55",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3304,10 +3304,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 9510,
+                    "id": 7792,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1361:7:59",
+                    "src": "1361:7:55",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -3316,34 +3316,34 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1337:38:59"
+              "src": "1337:38:55"
             },
             "returnParameters": {
-              "id": 9513,
+              "id": 7795,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1385:0:59"
+              "src": "1385:0:55"
             },
-            "scope": 9540,
-            "src": "1323:189:59",
+            "scope": 7822,
+            "src": "1323:189:55",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 9541,
-        "src": "330:1184:59"
+        "scope": 7823,
+        "src": "330:1184:55"
       }
     ],
-    "src": "32:1483:59"
+    "src": "32:1483:55"
   },
   "compiler": {
     "name": "solc",
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-27T14:46:28.939Z",
+  "schemaVersion": "3.4.2",
+  "updatedAt": "2021-07-27T08:00:18.899Z",
   "devdoc": {
     "details": "Library for managing uint256 to bool mapping in a compact and efficient way, providing the keys are sequential. Largelly inspired by Uniswap's https://github.com/Uniswap/merkle-distributor/blob/master/contracts/MerkleDistributor.sol[merkle-distributor].",
     "kind": "dev",
