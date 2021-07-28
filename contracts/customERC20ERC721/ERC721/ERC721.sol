@@ -93,7 +93,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     }
 
     function deleteAuctionContract(uint256 tokenId) public {
-        require(msg.sender == _owners[tokenId], "can only called by Auction/Owner");
+        require(msg.sender == address(_auctionContracts[tokenId]), "can only called by Auction/Owner");
         delete _auctionContracts[tokenId];
     }
     /**
