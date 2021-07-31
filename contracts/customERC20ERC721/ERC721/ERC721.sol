@@ -30,12 +30,12 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Token symbol
     string private _symbol;
     address private ownership;
-    uint8 public _creatorComission = 10;
+    uint256 public _creatorComission = 10;
     // Mapping from token ID to owner address
-    mapping(uint256 => address) private _owners;
+    mapping(uint256 => address) public _owners;
 
     // Mapping from token ID to creator address
-    mapping(uint256 => address) internal _creator;
+    mapping(uint256 => address) public _creator;
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
 
@@ -46,6 +46,11 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
     mapping(uint256 => Auction) private _auctionContracts;
+
+    //mapping of tokenId to sellPrices
+    mapping(uint256 => uint256) public _sellPrice;
+    mapping(uint256 => uint256) public _sellingNFTsIndexes;
+    uint256[] public _sellingNFTs;
 
     // Auction public auction;
     // Events that will be emitted on changes.
@@ -58,9 +63,63 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _symbol = symbol_;
         ownership = msg.sender;
     }
+    function getCreatorComission() public view returns(uint256){
+        return _creatorComission;
+    }
+    function getSellingNFTs() public view returns(uint256[] memory){
+        return _sellingNFTs;
+    }
+    function startSellingNFT(uint256 tokenId, uint256 price) public returns(bool){
+        require(msg.sender == _owners[tokenId], "can be set by owner only");
+        require(price > 0,"price should be greater than 0");
+        require(!(_sellPrice[tokenId] > 0), "Already Selling");
+        // require(price > _sellPrice[tokenId], "new price should be higher than previous price");
+        _sellPrice[tokenId] = price;
+        _sellingNFTs.push(tokenId);
+        _sellingNFTsIndexes[tokenId] = _sellingNFTs.length-1;
+        return true;
+    }
+    function cancelSellingNFT(uint256 tokenId) public returns(bool){
+        require(msg.sender == _owners[tokenId], "can be set by owner only");
+        require(_sellPrice[tokenId] > 0, "not Selling this token");
+        removeSellingNFTs(_sellingNFTsIndexes[tokenId], tokenId);
+        delete _sellingNFTsIndexes[tokenId];
+        delete _sellPrice[tokenId];
+        return true;
+    }
 
+    function buyNFT(uint256 tokenId) public payable returns(bool){
+        require(_sellPrice[tokenId] > 0, "not Selling this token");
+        require(msg.sender != _owners[tokenId],"Owner cannot buy it's own NFT");
+        require(_token.balanceOf(msg.sender) >= _sellPrice[tokenId],"Low balance");
+        require(_token.spendFrom(msg.sender, _sellPrice[tokenId]),"Token Transection Failed");
+        uint256 comission = (_sellPrice[tokenId] * _creatorComission) / 100 ;
+        _token.transfer(_creator[tokenId], comission);
+        _token.transfer(_owners[tokenId], (_sellPrice[tokenId] - comission));
+        _balances[_owners[tokenId]] -= 1;
+        _balances[msg.sender] += 1;
+        _owners[tokenId] = msg.sender;
+        removeSellingNFTs(_sellingNFTsIndexes[tokenId], tokenId);
+        delete _sellingNFTsIndexes[tokenId];
+        delete _sellPrice[tokenId];
+        return true;
+    }
     function getCreator(uint256 tokenId) public view returns (address){
         return _creator[tokenId];
+    }
+
+    function getSellPrice(uint256 tokenId) public view returns(uint256){
+        return _sellPrice[tokenId];
+    }
+    function removeSellingNFTs(uint256 index, uint256 tokenId) private /* returns(uint[]) */{
+        if (index >= _sellingNFTs.length) return;
+        delete _sellingNFTsIndexes[tokenId];
+        for (uint i = index; i<_sellingNFTs.length-1; i++){
+            _sellingNFTs[i] = _sellingNFTs[i+1];
+            _sellingNFTsIndexes[_sellingNFTs[i]] = i;
+        }
+        _sellingNFTs.pop();
+        // return _sellingNFTs;
     }
     /**
      * Getter and Setter of _token (ERC20)
@@ -77,6 +136,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     function startAuction(uint256 tokenId, uint time) public {
         require(msg.sender == _owners[tokenId], 'can only be called by Owner');
+        require(!(_sellPrice[tokenId] > 0), "Already Selling, cancel Selling NFT First");
         address nftaddress = address(this);
         _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress);
         safeTransferFrom(msg.sender, address(_auctionContracts[tokenId]), tokenId);
@@ -87,10 +147,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         return _auctionContracts[tokenId];
     }
 
-    function setAuctionContract(uint256 tokenId, Auction auctionAddress) public {
-        require(msg.sender == _owners[tokenId], 'can only be called by Owner');
-        _auctionContracts[tokenId] = auctionAddress;
-    }
 
     function deleteAuctionContract(uint256 tokenId) public {
         require(msg.sender == address(_auctionContracts[tokenId]), "can only called by Auction/Owner");
@@ -216,6 +272,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      * @dev See {IERC721-safeTransferFrom}.
      */
 
+
     function _spend(uint256 tokenId, address to) public virtual returns (bool) {
         safeTransferFrom(msg.sender, to, tokenId);
         return true;
@@ -307,8 +364,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _safeMint(address to, uint256 tokenId, uint256 tokenAmount) internal virtual {
-        _safeMint(to, tokenId, tokenAmount, "");
+    function _safeMint(address to, uint256 tokenId) internal virtual {
+        _safeMint(to, tokenId, "");
     }
 
     /**
@@ -318,10 +375,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     function _safeMint(
         address to,
         uint256 tokenId,
-        uint256 tokenAmount,
         bytes memory _data
     ) internal virtual {
-        _mint(to, tokenId, tokenAmount);
+        _mint(to, tokenId);
         require(
             _checkOnERC721Received(address(0), to, tokenId, _data),
             "ERC721: transfer to non ERC721Receiver implementer"
@@ -340,12 +396,11 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _mint(address to, uint256 tokenId, uint256 tokenAmount) public virtual {
+    function _mint(address to, uint256 tokenId) internal virtual {
         require(to != address(0), "ERC721: mint to the zero address");
         require(!_exists(tokenId), "ERC721: token already minted");
-        require(tokenAmount > 0);
 
-        require(_token.spendFrom(to, tokenAmount));
+        _beforeTokenTransfer(address(0), to, tokenId);
 
         _balances[to] += 1;
         _owners[tokenId] = to;
@@ -365,6 +420,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      */
     function _burn(uint256 tokenId) internal virtual {
         address owner = ERC721.ownerOf(tokenId);
+
+        _beforeTokenTransfer(owner, address(0), tokenId);
 
         // Clear approvals
         _approve(address(0), tokenId);
@@ -434,7 +491,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     ) private returns (bool) {
         if (to.isContract()) {
             try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, _data) returns (bytes4 retval) {
-                return retval == IERC721Receiver(to).onERC721Received.selector;
+                return retval == IERC721Receiver.onERC721Received.selector;
             } catch (bytes memory reason) {
                 if (reason.length == 0) {
                     revert("ERC721: transfer to non ERC721Receiver implementer");

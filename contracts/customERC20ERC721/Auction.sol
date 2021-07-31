@@ -174,7 +174,7 @@ contract Auction is IERC721Receiver{
         // external contracts.
 
         // 1. Conditions
-        require(msg.sender == beneficiary, "only owner of token can call this function");
+        require(msg.sender == beneficiary || msg.sender == highestBidder, "only owner of token can call this function");
         require(block.timestamp >= auctionEndTime, "Auction not yet ended.");
         require(!ended, "auctionEnd has already been called.");
 
@@ -185,7 +185,9 @@ contract Auction is IERC721Receiver{
         // 3. Interaction
         if(highestBidder != address(0)){
             _NFT._spend(_tokenId, highestBidder);
-            _token.transfer(beneficiary, highestBid);
+            uint256 comission = (highestBid * _NFT.getCreatorComission()) / 100 ;
+            _token.transfer(_NFT.getCreator(_tokenId), comission);
+            _token.transfer(beneficiary, (highestBid - comission));
             for (uint256 i = 1; i < allBidders.length; i++){
                 _withdraw(allBidders[i]);
             }
