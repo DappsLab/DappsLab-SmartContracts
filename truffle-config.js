@@ -21,14 +21,14 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
-const HDWallet = require("truffle-hdwallet-provider");
+//
+const HDWallet = require("@truffle/hdwallet-provider");
 const developmentMnemonic = "demise saddle enable client bid grape sister age aisle divide planet mushroom";
 
 const infuraKey = "a3f4dff0483a48ebaec64b896445c146";
 //
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
+// const fs = require('fs');
+// const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
     /**
@@ -55,24 +55,26 @@ module.exports = {
         },
         geth: {
             provider: () =>
-                new HDWallet(developmentMnemonic, "http://127.0.0.1:8545"),
-            network_id: "*"
+                new HDWallet('0x4d282978e7dd0bf1d97511895a1af88bccb0f495dd0da0c6b5f316f8014c1a05', "http://178.128.45.157:8545"),
+                // new HDWallet(developmentMnemonic, "http://178.128.45.157:8545"),
+            network_id: "13936",
         },
-        bsc: {
+        fornax: {
             provider: () =>
-                new HDWallet(mnemonic, "https://data-seed-prebsc-1-s1.binance.org:8545/"),
-            network_id: 97,       // Ropsten's id
-            gas: 5500000,        // Ropsten has a lower block limit than mainnet
+                new HDWallet('0x4d282978e7dd0bf1d97511895a1af88bccb0f495dd0da0c6b5f316f8014c1a05', "http://64.225.91.151:8545"),
+            network_id: 13936, // Ropsten's id
+            chainId: 13936,
+            gas: 410000,        // Ropsten has a lower block limit than mainnet
             confirmations: 2,    // # of confs to wait between deployments. (default: 0)
             timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
             skipDryRun: true,    // Skip dry run before migrations? (default: false for public nets )        },
         },
         // Another network with more advanced options...
         advanced: {
-            // port: 8777,             // Custom port
-            // network_id: 1342,       // Custom network
+            // port: 8545,             // Custom port
+            // network_id: 13936,       // Custom network
             // gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
-            // gasPrice: 20000000000,  // 20 gwei (in wei) (default: 100 gwei)
+            // gasPrice: 21000000000,  // 20 gwei (in wei) (default: 100 gwei)
             // from: <address>,        // Account to send txs from (default: accounts[0])
             // websockets: true        // Enable EventEmitter interface for web3 (default: false)
         },
