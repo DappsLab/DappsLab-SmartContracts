@@ -185,9 +185,12 @@ contract Auction is IERC721Receiver{
         // 3. Interaction
         if(highestBidder != address(0)){
             _NFT._spend(_tokenId, highestBidder);
-            uint256 comission = (highestBid * _NFT.getCreatorComission()) / 100 ;
-            _token.transfer(_NFT.getCreator(_tokenId), comission);
-            _token.transfer(beneficiary, (highestBid - comission));
+            uint256 commission = (highestBid * _NFT.getCreatorCommission()) / 100 ;
+            _token.transfer(_NFT.getCreator(_tokenId), commission);
+            uint256 platform = (highestBid * _NFT.getPlatformCommission()) / 100 ;
+            _token.transfer(_NFT.getCreator(_tokenId), platform);
+            uint256 total = commission + platform;
+            _token.transfer(beneficiary, (highestBid - total));
             for (uint256 i = 1; i < allBidders.length; i++){
                 _withdraw(allBidders[i]);
             }

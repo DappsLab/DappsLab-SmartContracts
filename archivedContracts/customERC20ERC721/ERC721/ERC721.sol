@@ -30,7 +30,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Token symbol
     string private _symbol;
     address private ownership;
-    uint256 public _creatorComission = 10;
+    uint256 public _creatorCommission = 5;
+    uint256 public _platformCommission = 2;
+    address public  platformAddress;
     // Mapping from token ID to owner address
     mapping(uint256 => address) public _owners;
 
@@ -93,9 +95,12 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(msg.sender != _owners[tokenId],"Owner cannot buy it's own NFT");
         require(_token.balanceOf(msg.sender) >= _sellPrice[tokenId],"Low balance");
         require(_token.spendFrom(msg.sender, _sellPrice[tokenId]),"Token Transection Failed");
-        uint256 comission = (_sellPrice[tokenId] * _creatorComission) / 100 ;
-        _token.transfer(_creator[tokenId], comission);
-        _token.transfer(_owners[tokenId], (_sellPrice[tokenId] - comission));
+        uint256 commission = (_sellPrice[tokenId] * _creatorCommission) / 100 ;
+        _token.transfer(_creator[tokenId], commission);
+        uint256 platform = (_sellPrice[tokenId] * _platformCommission) / 100 ;
+        _token.transfer(_creator[tokenId], platform);
+        uint256 total = commission + platform;
+        _token.transfer(_owners[tokenId], (_sellPrice[tokenId] - total));
         _balances[_owners[tokenId]] -= 1;
         _balances[msg.sender] += 1;
         _owners[tokenId] = msg.sender;
@@ -106,6 +111,13 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     }
     function getCreator(uint256 tokenId) public view returns (address){
         return _creator[tokenId];
+    }
+    function getPlatformCommission() public view returns (uint256){
+        return _platformCommission;
+    }
+    function setPlatformAdddress(address addr)public  {
+        require(msg.sender == ownership, "can be called by Contract Owner");
+        platformAddress  = addr;
     }
 
     function getSellPrice(uint256 tokenId) public view returns(uint256){

@@ -1,6 +1,6 @@
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
-let list = ['0xCf4D33D710C2f487A8EbbDC57dD39a37F34A619a','0x0B4163cDadd2b5505EB87fBd06eEC0aa58CeB2D2','0x31738e41771F1502858EBaC782D13D1bA2D253B4','0x627f5f6962f050b71ee40168b60Cd36E70478Ea5']
+let list = ['0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2','0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678','0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db','0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB']
 const merkleTree = new MerkleTree(list, keccak256, { hashLeaves: true, sortPairs: true });
 
 const root = merkleTree.getHexRoot();

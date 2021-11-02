@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <script type="text/javascript">
+      import WalletLink from "walletlink"
+      import Web3 from "web3"
+
+      const walletLink = new WalletLink({
+        appName: "My Awesome DApp",
+        appLogoUrl: "https://example.com/logo.png",
+        darkMode: "false"
+      })
+
+      const ethereum = walletLink.makeWeb3Provider(
+              "https://mainnet.infura.io/v3/INFURA_API_KEY", 1
+      )
+
+      const web3 = new Web3(ethereum)
+      console.log(ethereum)
+    </script>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+  </body>
+</html>
