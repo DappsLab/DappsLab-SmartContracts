@@ -5,17 +5,16 @@ pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
 import "./extensions/IERC721Metadata.sol";
-import "../utils/Address.sol";
-import "../utils/Context.sol";
-import "../utils/Strings.sol";
-import "../utils/introspection/ERC165.sol";
-import "../ERC20/ERC20.sol";
+import "../../utils/Address.sol";
+import "../../utils/Context.sol";
+import "../../utils/Strings.sol";
+import "../../utils/introspection/ERC165.sol";
+
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}.
  */
-
 contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using Strings for uint256;
@@ -25,13 +24,15 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     // Token symbol
     string private _symbol;
-    address private ownership;
-    uint256 public _creatorComission = 10;
-    // Mapping from token ID to owner address
-    mapping(uint256 => address) public _owners;
+    mapping(uint256 => string) private _tokenURIs;
 
-    // Mapping from token ID to creator address
-    mapping(uint256 => address) public _creator;
+    // Mapping from token ID to owner address
+    mapping(uint256 => address) private _owners;
+
+    mapping(uint256 => address) private _lenders;
+    mapping(uint256 => uint256) private _lendingTime;
+    mapping(uint256 => uint256) private _lendingPrice;
+
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
 
@@ -41,13 +42,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    //mapping of tokenId to sellPrices
     mapping(uint256 => uint256) public _sellPrice;
     mapping(uint256 => uint256) public _sellingNFTsIndexes;
     uint256[] public _sellingNFTs;
-
-    // Auction public auction;
-    // Events that will be emitted on changes.
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -55,52 +52,102 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
-        ownership = msg.sender;
     }
 
-    function getCreatorComission() public view returns(uint256){
-        return _creatorComission;
+    function startSellingNFT(uint256 tokenId, uint256 price) public returns(bool){
+        require(msg.sender == _owners[tokenId], "can be set by owner only");
+        require(price > 0,"price should be greater than 0");
+        require(!(_sellPrice[tokenId] > 0), "Already Selling");
+        // require(price > _sellPrice[tokenId], "new price should be higher than previous price");
+        _sellPrice[tokenId] = price;
+        _sellingNFTs.push(tokenId);
+        _sellingNFTsIndexes[tokenId] = _sellingNFTs.length-1;
+        return true;
     }
-    function getSellingNFTs() public view returns(uint256[] memory){
-        return _sellingNFTs;
+
+    function buyNFT(uint256 tokenId) public payable returns(bool){
+        require(_sellPrice[tokenId] > 0, "not Selling this token");
+        require(msg.sender != _owners[tokenId],"Owner cannot buy it's own NFT");
+        require(msg.value >= _sellPrice[tokenId],"Low balance");
+        (bool sent, bytes memory data) = payable(_owners[tokenId]).call{value: msg.value}("");
+        require(sent, "Failed to send Ether to Owner");
+        _balances[_owners[tokenId]] -= 1;
+        _balances[msg.sender] += 1;
+        _owners[tokenId] = msg.sender;
+        removeSellingNFTs(_sellingNFTsIndexes[tokenId], tokenId);
+        delete _sellingNFTsIndexes[tokenId];
+        delete _sellPrice[tokenId];
+        return true;
     }
-//    function startSellingNFT(uint256 tokenId, uint256 price) public returns(bool){
-//        return false;
-//    }
-
-//    function cancelSellingNFT(uint256 tokenId) public returns(bool){
-//        return false;
-//    }
-
-
-//    function buyNFT(uint256 tokenId) public payable returns(bool){
-//        return false;
-//    }
-
-    function getCreator(uint256 tokenId) public view returns (address){
-        return _creator[tokenId];
+    function cancelSellingNFT(uint256 tokenId) public returns(bool){
+        require(msg.sender == _owners[tokenId], "can be set by owner only");
+        require(_sellPrice[tokenId] > 0, "not Selling this token");
+        removeSellingNFTs(_sellingNFTsIndexes[tokenId], tokenId);
+        delete _sellingNFTsIndexes[tokenId];
+        delete _sellPrice[tokenId];
+        return true;
+    }
+    function removeSellingNFTs(uint256 index, uint256 tokenId) private /* returns(uint[]) */{
+        if (index >= _sellingNFTs.length) return;
+        delete _sellingNFTsIndexes[tokenId];
+        for (uint i = index; i<_sellingNFTs.length-1; i++){
+            _sellingNFTs[i] = _sellingNFTs[i+1];
+            _sellingNFTsIndexes[_sellingNFTs[i]] = i;
+        }
+        _sellingNFTs.pop();
     }
 
     function getSellPrice(uint256 tokenId) public view returns(uint256){
         return _sellPrice[tokenId];
     }
-    function removeSellingNFTs(uint256 index, uint256 tokenId) private /* returns(uint[]) */{
 
+    function startLending(uint256 tokenId, uint256 lendingPrice) public {
+        require(msg.sender == _owners[tokenId], "only owner is allowed to start lending!");
+        _lendingPrice[tokenId]= lendingPrice;
+
+    }
+
+    function cancelLending(uint256 tokenId) public {
+        require(msg.sender == _owners[tokenId], "only owner is allowed to start lending!");
+        require(_lenders[tokenId]==address(0),"someone is lendind this token!");
+        _lendingPrice[tokenId] = 0;
+
+    }
+
+    function lend(uint256 tokenId, uint256 lendingTime) public payable{
+        require(msg.sender != _owners[tokenId], "owner is not allowed to lend!");
+        require(_lendingPrice[tokenId] > 0, "this token is not for lending");
+        uint256 price = _lendingPrice[tokenId] * lendingTime;
+        require(msg.value >= price, "sending low balance");
+        (bool sent, bytes memory data) = payable(_owners[tokenId]).call{value: price}("");
+        require(sent, "Failed to send Ether to Team");
+        _lendingTime[tokenId] = block.timestamp + (lendingTime*3600);
+        _lenders[tokenId] = msg.sender;
+    }
+
+    function endLending(uint256 tokenId)public {
+        require(_lenders[tokenId]!= address(0),"Not lending this token");
+        require(_owners[tokenId] == msg.sender || _lenders[tokenId] == msg.sender,"only owner or lender of this token call this function");
+        require(block.timestamp >= _lendingTime[tokenId], "Lending not yet ended.");
+        _lenders[tokenId] = address(0);
+        _lendingPrice[tokenId] = 0;
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
+
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
         return
-            interfaceId == type(IERC721).interfaceId ||
-            interfaceId == type(IERC721Metadata).interfaceId ||
-            super.supportsInterface(interfaceId);
+        interfaceId == type(IERC721).interfaceId ||
+    interfaceId == type(IERC721Metadata).interfaceId ||
+    super.supportsInterface(interfaceId);
     }
 
     /**
      * @dev See {IERC721-balanceOf}.
      */
+
     function balanceOf(address owner) public view virtual override returns (uint256) {
         require(owner != address(0), "ERC721: balance query for the zero address");
         return _balances[owner];
@@ -132,13 +179,21 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+    // function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    //     require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
-        string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+    //     string memory baseURI = _baseURI();
+    //     return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+    // }
+    function tokenURI(uint256 tokenId) public view virtual override returns(string memory){
+        require(_owners[tokenId] == msg.sender || _lenders[tokenId] == msg.sender,"only owner or lender of this token call this function");
+        return _tokenURIs[tokenId];
     }
 
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
+        _tokenURIs[tokenId] = _tokenURI;
+    }
     /**
      * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
      * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
@@ -203,13 +258,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     /**
      * @dev See {IERC721-safeTransferFrom}.
      */
-
-
-    function _spend(uint256 tokenId, address to) public virtual returns (bool) {
-        safeTransferFrom(msg.sender, to, tokenId);
-        return true;
-    }
-
     function safeTransferFrom(
         address from,
         address to,
@@ -334,7 +382,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[to] += 1;
         _owners[tokenId] = to;
-        _creator[tokenId] = to;
+
         emit Transfer(address(0), to, tokenId);
     }
 
@@ -348,7 +396,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _burn(uint256 tokenId) internal virtual {
+    function _burn(uint256 tokenId) internal virtual{
         address owner = ERC721.ownerOf(tokenId);
 
         _beforeTokenTransfer(owner, address(0), tokenId);

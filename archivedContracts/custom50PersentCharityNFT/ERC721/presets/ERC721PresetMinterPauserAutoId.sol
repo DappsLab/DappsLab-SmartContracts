@@ -6,9 +6,9 @@ import "../ERC721.sol";
 import "../extensions/ERC721Enumerable.sol";
 import "../extensions/ERC721Burnable.sol";
 import "../extensions/ERC721Pausable.sol";
-import "../../access/AccessControlEnumerable.sol";
-import "../../utils/Context.sol";
-import "../../utils/Counters.sol";
+import "../../../access/AccessControlEnumerable.sol";
+import "../../../utils/Context.sol";
+import "../../../utils/Counters.sol";
 
 /**
  * @dev {ERC721} token, including:
@@ -26,11 +26,11 @@ import "../../utils/Counters.sol";
  * and pauser roles to other accounts.
  */
 contract ERC721PresetMinterPauserAutoId is
-    Context,
-    AccessControlEnumerable,
-    ERC721Enumerable,
-    ERC721Burnable,
-    ERC721Pausable
+Context,
+AccessControlEnumerable,
+ERC721Enumerable,
+ERC721Burnable,
+ERC721Pausable
 {
     using Counters for Counters.Counter;
 
@@ -76,7 +76,7 @@ contract ERC721PresetMinterPauserAutoId is
      *
      * - the caller must have the `MINTER_ROLE`.
      */
-    function mint(address to) public virtual {
+    function safeMint(address to) public virtual {
         require(hasRole(MINTER_ROLE, _msgSender()), "ERC721PresetMinterPauserAutoId: must have minter role to mint");
 
         // We cannot just use balanceOf to create the new tokenId because tokens
@@ -84,6 +84,17 @@ contract ERC721PresetMinterPauserAutoId is
         _mint(to, _tokenIdTracker.current());
         _tokenIdTracker.increment();
     }
+
+    function mint(address to, string memory url) public virtual{
+        // require(hasRole(MINTER_ROLE, _msgSender()), "ERC721PresetMinterPauserAutoId: must have minter role to mint");
+
+        // We cannot just use balanceOf to create the new tokenId because tokens
+        // can be burned (destroyed), so we need a separate counter.
+        _mint(to, _tokenIdTracker.current());
+        _setTokenURI(_tokenIdTracker.current(), url);
+        _tokenIdTracker.increment();
+    }
+
 
     /**
      * @dev Pauses all token transfers.
@@ -125,11 +136,11 @@ contract ERC721PresetMinterPauserAutoId is
      * @dev See {IERC165-supportsInterface}.
      */
     function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(AccessControlEnumerable, ERC721, ERC721Enumerable)
-        returns (bool)
+    public
+    view
+    virtual
+    override(AccessControlEnumerable, ERC721, ERC721Enumerable)
+    returns (bool)
     {
         return super.supportsInterface(interfaceId);
     }

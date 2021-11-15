@@ -13,6 +13,7 @@ contract AirdropTokens is Ownable{
     using MerkleProof for bytes32[];
     uint256 public totalTokens;
     address[] public users;
+
     mapping(address => uint256) public claimed;
     bytes32 merkleRoot;
     bool public isAirdropped;
@@ -63,15 +64,19 @@ contract AirdropTokens is Ownable{
         }
     }
 
-    function claim(bytes32[] memory proof) public {
-        require(merkleRoot != 0, "AirdropTokens not available yet!");
+    function claim(bytes32[] memory proof, uint claimAmount) public {
+        const root = merkleRootMap[claimAmount];
+        require(root != 0, "AirdropTokens not available yet!");
 
-        require(proof.verify(merkleRoot, keccak256(abi.encodePacked(msg.sender))), "You are not in the list");
+        require(proof.verify(root, keccak256(abi.encodePacked(msg.sender))), "You are not in the list");
 
         uint256 total = totalTokens/users.length;
 
         require(_token.transfer(msg.sender, total), "Transfer failed.");
         emit GainsClaimed(msg.sender, total);
     }
+
+//     User can't claim twice
+//    Owner can withdraw tokens from Conteact at anytime.
 
 }
