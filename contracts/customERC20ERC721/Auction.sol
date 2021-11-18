@@ -22,6 +22,7 @@ contract Auction is IERC721Receiver{
     // Allowed withdrawals of previous bids
     mapping(address => uint) pendingReturns;
     mapping(address => uint) bidderIndexes;
+    uint256 minimumPrice;
     address[] private allBidders;
 
     // Set to true at the end, disallows any change.
@@ -45,13 +46,15 @@ contract Auction is IERC721Receiver{
         uint _biddingTime,
         address _beneficiary,
         ERC20 tokenAddress,
-        address NFT
+        address NFT,
+        uint256 minPrice
     ) {
         _tokenId = tokenId;
         beneficiary = payable(_beneficiary);
         auctionEndTime = block.timestamp + _biddingTime;
         _token = tokenAddress;
         _NFT = ERC721(NFT);
+        minimumPrice = minPrice;
         allBidders.push(address(0));
     }
 
@@ -113,6 +116,7 @@ contract Auction is IERC721Receiver{
         // will revert all changes in this
         // function execution including
         // it having received the money).
+        require(amount >= minimumPrice, "Amount is less than minimum Price!");
         require(
             amount > highestBid,
             "There already is a higher bid."

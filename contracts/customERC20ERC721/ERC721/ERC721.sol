@@ -65,8 +65,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _symbol = symbol_;
         ownership = msg.sender;
     }
-    function getCreatorComission() public view returns(uint256){
-        return _creatorComission;
+    function getCreatorCommission() public view returns(uint256){
+        return _creatorCommission;
     }
     function getSellingNFTs() public view returns(uint256[] memory){
         return _sellingNFTs;
@@ -146,11 +146,11 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _token = ERC20(tokenAddress);
     }
 
-    function startAuction(uint256 tokenId, uint time) public {
+    function startAuction(uint256 tokenId, uint time, uint256 minPrice) public {
         require(msg.sender == _owners[tokenId], 'can only be called by Owner');
         require(!(_sellPrice[tokenId] > 0), "Already Selling, cancel Selling NFT First");
         address nftaddress = address(this);
-        _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress);
+        _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress, minPrice);
         safeTransferFrom(msg.sender, address(_auctionContracts[tokenId]), tokenId);
         _token.setAuctionsAddress(tokenId, address(_auctionContracts[tokenId]));
     }
