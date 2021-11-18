@@ -71,15 +71,17 @@ module.exports = {
         },
         bsc: {
             provider: () =>
-                new HDWallet('0x4d282978e7dd0bf1d97511895a1af88bccb0f495dd0da0c6b5f316f8014c1a05', "http://64.225.91.151:8545"),
-            network_id: 13936, // Ropsten's id
-            chainId: 13936,
-            gas: 410000,        // Ropsten has a lower block limit than mainnet
-            confirmations: 2,    // # of confs to wait between deployments. (default: 0)
-            timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-            skipDryRun: true,    // Skip dry run before migrations? (default: false for public nets )        },
+                new HDWallet(
+                    '0x1cd194d2a436dab859b7d62452f8decc6705259cdb56d399f99f99e11ef356a4',
+                    "https://data-seed-prebsc-1-s1.binance.org:8545/"
+                ),
+            network_id: 97, // Ropsten's id
+            gas: 5500000, // Ropsten has a lower block limit than mainnet
+            confirmations: 2, // # of confs to wait between deployments. (default: 0)
+            timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
+            skipDryRun: true, // Skip dry run before migrations? (default: false
+            // Another network with more advanced options...
         },
-        // Another network with more advanced options...
         advanced: {
             // port: 8545,             // Custom port
             // network_id: 13936,       // Custom network
