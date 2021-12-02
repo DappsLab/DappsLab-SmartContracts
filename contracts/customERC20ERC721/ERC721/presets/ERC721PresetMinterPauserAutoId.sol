@@ -90,6 +90,12 @@ ERC721Pausable
         _mint(to, _tokenIdTracker.current());
         _tokenIdTracker.increment();
     }
+    function multiMint(address to, uint256 amount) public virtual{
+         for(uint256 i=0; i<amount; i++){
+             _mint(to, _tokenIdTracker.current());
+             _tokenIdTracker.increment();
+         }
+    }
 
     /**
      * @dev Pauses all token transfers.
