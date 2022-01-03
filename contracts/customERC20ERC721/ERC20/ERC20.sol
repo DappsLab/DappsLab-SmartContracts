@@ -38,7 +38,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     uint256 private _totalSupply;
     address private ownership;
     address private _NFTRegistery; //getters and setters
-    mapping (uint256 => address) private _AuctionsAddress;
     string private _name;
     string private _symbol;
 
@@ -75,17 +74,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         _NFTRegistery = NFTRegistery;
     }
 
-    function getAuctionsAddress(uint256 tokenId) public view returns (address) {
-        return _AuctionsAddress[tokenId];
-    }
-    function setAuctionsAddress(uint256 tokenId, address auctionAddress) public {
-        require(msg.sender == _NFTRegistery, "can only called from NFT");
-        _AuctionsAddress[tokenId] = auctionAddress;
-    }
-    function deleteAuctionAddress(uint256 tokenId) public {
-        require(msg.sender == _AuctionsAddress[tokenId], "can only called from Auction");
-        delete _AuctionsAddress[tokenId];
-    }
     /**
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
@@ -152,8 +140,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         require(_balances[from] > amount);
         if(isNFT){
             require(msg.sender == _NFTRegistery);
-        }else{
-            require(msg.sender == _AuctionsAddress[tokenId]);
         }
         _balances[from] = _balances[from] - amount;
         _balances[msg.sender] = _balances[msg.sender] + amount;

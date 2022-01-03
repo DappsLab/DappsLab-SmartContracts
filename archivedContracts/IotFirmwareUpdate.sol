@@ -8,7 +8,7 @@ contract IOT is Ownable{
     mapping (address  => string) public vendorIP;//IPs of vendors
     mapping (address  => string) public distributerIP;//IPS of distributers
     mapping(address  => uint256) public distributerBalance;//Balance of distributer
-    mapping(address => string) public iotDeviceModel;// model of iot device
+    mapping(bytes32 => string) private iotDeviceModel;// model of iot device
 
     //Firmware data
     struct Firmware{
@@ -23,7 +23,7 @@ contract IOT is Ownable{
     //device data
     struct Device{
         string model;
-        address deviveAddress;
+        bytes32 deviveAddress;
         address distributer;
         string version;
         bytes32 hash;
@@ -45,7 +45,8 @@ contract IOT is Ownable{
     function getBalance()public view returns(uint256){
         return distributerBalance[msg.sender];
     }
-    function deviceInfo(address iotAddr) public view returns(Device memory){
+    function deviceInfo(address iotAddress) public view returns(Device memory){
+        bytes32 iotAddr = ethMessageHash(toAsciiString(iotAddress));
         Device[] memory devices = modelDevices[iotDeviceModel[iotAddr]];
         for(uint256 i =0; i < devices.length;i++){
             if(devices[i].deviveAddress == iotAddr){
@@ -61,11 +62,11 @@ contract IOT is Ownable{
     }
 
     //Only Vendor will call this function to register Devices of the given model
-    function registerDevices(string memory model,address[] memory devicesAddresses, uint256 count) public returns(bool){
+    function registerDevices(string memory model,bytes32[] memory devicesAddresses, uint256 count) public returns(bool){
         require(msg.sender == modelVendors[model],"sender is not a vendor or not registered as vendor");
         for(uint256 i=0; i < count; i++){
             bytes32 hash = bytes32(0);
-            address devAddr = devicesAddresses[i];
+            bytes32 devAddr = devicesAddresses[i];
             address zeroAddr = address(0);
             Device memory device = Device(model, devAddr, zeroAddr, "0", hash, true);
             device.model = model;
@@ -122,10 +123,11 @@ contract IOT is Ownable{
         return true;
     }
 
-    function reportUpdate(string memory model, string memory version, address iotAddr, uint256 time, bytes memory sign, string memory message)public returns(bool){
+    function reportUpdate(string memory model, string memory version, bytes32 iotAddr, uint256 time, bytes memory sign, string memory message)public returns(bool){
         bytes32 hash = ethMessageHash(message);
         address recoveredAddress = recover(hash, sign);
-        require(recoveredAddress == iotAddr, "invalid Address");
+        bytes32 recaddr = ethMessageHash(toAsciiString(recoveredAddress));
+        require(recaddr == iotAddr, "invalid Address");
         require(keccak256(abi.encodePacked(iotDeviceModel[iotAddr])) == keccak256(abi.encodePacked(model)),"model not matched");
         for(uint256 i = 0; i < modelDevices[model].length;i++){
             if(modelDevices[model][i].deviveAddress == iotAddr){
@@ -203,6 +205,27 @@ contract IOT is Ownable{
         return keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", hash)
         );
+    }
+    function toAsciiString(address x) public pure returns (string memory) {
+        bytes memory s = new bytes(40);
+        for (uint i = 0; i < 20; i++) {
+            bytes1 b = bytes1(uint8(uint(uint160(x)) / (2**(8*(19 - i)))));
+            bytes1 hi = bytes1(uint8(b) / 16);
+            bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
+            s[2*i] = char(hi);
+            s[2*i+1] = char(lo);
+        }
+        return string(s);
+    }
+
+    function char(bytes1 b) internal pure returns (bytes1 c) {
+        if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
+        else return bytes1(uint8(b) + 0x57);
+    }
+    function addressToHash(address addr)public pure returns(bytes32){
+        // return toAsciiString(addr);
+        // return keccak256(abi.encodePacked(addr));
+        return ethMessageHash(toAsciiString(addr));
     }
 
 

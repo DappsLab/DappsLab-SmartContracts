@@ -1468,18 +1468,18 @@
     "absolutePath": "project:/contracts/customERC20ERC721/ERC721/utils/ERC721Holder.sol",
     "exportedSymbols": {
       "ERC721Holder": [
-        4930
+        4962
       ],
       "IERC721Receiver": [
         4106
       ]
     },
-    "id": 4931,
+    "id": 4963,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4905,
+        "id": 4937,
         "literals": [
           "solidity",
           "^",
@@ -1492,9 +1492,9 @@
       {
         "absolutePath": "project:/contracts/customERC20ERC721/ERC721/IERC721Receiver.sol",
         "file": "../IERC721Receiver.sol",
-        "id": 4906,
+        "id": 4938,
         "nodeType": "ImportDirective",
-        "scope": 4931,
+        "scope": 4963,
         "sourceUnit": 4107,
         "src": "58:32:25",
         "symbolAliases": [],
@@ -1505,13 +1505,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 4908,
+              "id": 4940,
               "name": "IERC721Receiver",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 4106,
               "src": "353:15:25"
             },
-            "id": 4909,
+            "id": 4941,
             "nodeType": "InheritanceSpecifier",
             "src": "353:15:25"
           }
@@ -1521,15 +1521,15 @@
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 4907,
+          "id": 4939,
           "nodeType": "StructuredDocumentation",
           "src": "92:235:25",
           "text": " @dev Implementation of the {IERC721Receiver} interface.\n Accepts all token transfers.\n Make sure the contract is able to use its token with {IERC721-safeTransferFrom}, {IERC721-approve} or {IERC721-setApprovalForAll}."
         },
         "fullyImplemented": true,
-        "id": 4930,
+        "id": 4962,
         "linearizedBaseContracts": [
-          4930,
+          4962,
           4106
         ],
         "name": "ERC721Holder",
@@ -1540,7 +1540,7 @@
               4105
             ],
             "body": {
-              "id": 4928,
+              "id": 4960,
               "nodeType": "Block",
               "src": "663:54:25",
               "statements": [
@@ -1548,32 +1548,32 @@
                   "expression": {
                     "expression": {
                       "expression": {
-                        "id": 4924,
+                        "id": 4956,
                         "name": "this",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967268,
                         "src": "680:4:25",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC721Holder_$4930",
+                          "typeIdentifier": "t_contract$_ERC721Holder_$4962",
                           "typeString": "contract ERC721Holder"
                         }
                       },
-                      "id": 4925,
+                      "id": 4957,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "onERC721Received",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4929,
+                      "referencedDeclaration": 4961,
                       "src": "680:21:25",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_address_$_t_uint256_$_t_bytes_memory_ptr_$returns$_t_bytes4_$",
                         "typeString": "function (address,address,uint256,bytes memory) external returns (bytes4)"
                       }
                     },
-                    "id": 4926,
+                    "id": 4958,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1586,43 +1586,43 @@
                       "typeString": "bytes4"
                     }
                   },
-                  "functionReturnParameters": 4923,
-                  "id": 4927,
+                  "functionReturnParameters": 4955,
+                  "id": 4959,
                   "nodeType": "Return",
                   "src": "673:37:25"
                 }
               ]
             },
             "documentation": {
-              "id": 4910,
+              "id": 4942,
               "nodeType": "StructuredDocumentation",
               "src": "375:137:25",
               "text": " @dev See {IERC721Receiver-onERC721Received}.\n Always returns `IERC721Receiver.onERC721Received.selector`."
             },
             "functionSelector": "150b7a02",
-            "id": 4929,
+            "id": 4961,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "onERC721Received",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 4920,
+              "id": 4952,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "637:8:25"
             },
             "parameters": {
-              "id": 4919,
+              "id": 4951,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4912,
+                  "id": 4944,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "552:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1631,7 +1631,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4911,
+                    "id": 4943,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "552:7:25",
@@ -1645,11 +1645,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4914,
+                  "id": 4946,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "569:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1658,7 +1658,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4913,
+                    "id": 4945,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "569:7:25",
@@ -1672,11 +1672,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4916,
+                  "id": 4948,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "586:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1685,7 +1685,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4915,
+                    "id": 4947,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "586:7:25",
@@ -1698,11 +1698,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4918,
+                  "id": 4950,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "603:12:25",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1711,7 +1711,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 4917,
+                    "id": 4949,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "603:5:25",
@@ -1726,16 +1726,16 @@
               "src": "542:79:25"
             },
             "returnParameters": {
-              "id": 4923,
+              "id": 4955,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4922,
+                  "id": 4954,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "655:6:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1744,7 +1744,7 @@
                     "typeString": "bytes4"
                   },
                   "typeName": {
-                    "id": 4921,
+                    "id": 4953,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
                     "src": "655:6:25",
@@ -1758,14 +1758,14 @@
               ],
               "src": "654:8:25"
             },
-            "scope": 4930,
+            "scope": 4962,
             "src": "517:200:25",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 4931,
+        "scope": 4963,
         "src": "328:391:25"
       }
     ],
@@ -1775,18 +1775,18 @@
     "absolutePath": "project:/contracts/customERC20ERC721/ERC721/utils/ERC721Holder.sol",
     "exportedSymbols": {
       "ERC721Holder": [
-        4930
+        4962
       ],
       "IERC721Receiver": [
         4106
       ]
     },
-    "id": 4931,
+    "id": 4963,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4905,
+        "id": 4937,
         "literals": [
           "solidity",
           "^",
@@ -1799,9 +1799,9 @@
       {
         "absolutePath": "project:/contracts/customERC20ERC721/ERC721/IERC721Receiver.sol",
         "file": "../IERC721Receiver.sol",
-        "id": 4906,
+        "id": 4938,
         "nodeType": "ImportDirective",
-        "scope": 4931,
+        "scope": 4963,
         "sourceUnit": 4107,
         "src": "58:32:25",
         "symbolAliases": [],
@@ -1812,13 +1812,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 4908,
+              "id": 4940,
               "name": "IERC721Receiver",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 4106,
               "src": "353:15:25"
             },
-            "id": 4909,
+            "id": 4941,
             "nodeType": "InheritanceSpecifier",
             "src": "353:15:25"
           }
@@ -1828,15 +1828,15 @@
         ],
         "contractKind": "contract",
         "documentation": {
-          "id": 4907,
+          "id": 4939,
           "nodeType": "StructuredDocumentation",
           "src": "92:235:25",
           "text": " @dev Implementation of the {IERC721Receiver} interface.\n Accepts all token transfers.\n Make sure the contract is able to use its token with {IERC721-safeTransferFrom}, {IERC721-approve} or {IERC721-setApprovalForAll}."
         },
         "fullyImplemented": true,
-        "id": 4930,
+        "id": 4962,
         "linearizedBaseContracts": [
-          4930,
+          4962,
           4106
         ],
         "name": "ERC721Holder",
@@ -1847,7 +1847,7 @@
               4105
             ],
             "body": {
-              "id": 4928,
+              "id": 4960,
               "nodeType": "Block",
               "src": "663:54:25",
               "statements": [
@@ -1855,32 +1855,32 @@
                   "expression": {
                     "expression": {
                       "expression": {
-                        "id": 4924,
+                        "id": 4956,
                         "name": "this",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967268,
                         "src": "680:4:25",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_ERC721Holder_$4930",
+                          "typeIdentifier": "t_contract$_ERC721Holder_$4962",
                           "typeString": "contract ERC721Holder"
                         }
                       },
-                      "id": 4925,
+                      "id": 4957,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "onERC721Received",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 4929,
+                      "referencedDeclaration": 4961,
                       "src": "680:21:25",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_address_$_t_uint256_$_t_bytes_memory_ptr_$returns$_t_bytes4_$",
                         "typeString": "function (address,address,uint256,bytes memory) external returns (bytes4)"
                       }
                     },
-                    "id": 4926,
+                    "id": 4958,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1893,43 +1893,43 @@
                       "typeString": "bytes4"
                     }
                   },
-                  "functionReturnParameters": 4923,
-                  "id": 4927,
+                  "functionReturnParameters": 4955,
+                  "id": 4959,
                   "nodeType": "Return",
                   "src": "673:37:25"
                 }
               ]
             },
             "documentation": {
-              "id": 4910,
+              "id": 4942,
               "nodeType": "StructuredDocumentation",
               "src": "375:137:25",
               "text": " @dev See {IERC721Receiver-onERC721Received}.\n Always returns `IERC721Receiver.onERC721Received.selector`."
             },
             "functionSelector": "150b7a02",
-            "id": 4929,
+            "id": 4961,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "onERC721Received",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 4920,
+              "id": 4952,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "637:8:25"
             },
             "parameters": {
-              "id": 4919,
+              "id": 4951,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4912,
+                  "id": 4944,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "552:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1938,7 +1938,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4911,
+                    "id": 4943,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "552:7:25",
@@ -1952,11 +1952,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4914,
+                  "id": 4946,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "569:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1965,7 +1965,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4913,
+                    "id": 4945,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "569:7:25",
@@ -1979,11 +1979,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4916,
+                  "id": 4948,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "586:7:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1992,7 +1992,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4915,
+                    "id": 4947,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "586:7:25",
@@ -2005,11 +2005,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 4918,
+                  "id": 4950,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "603:12:25",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2018,7 +2018,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 4917,
+                    "id": 4949,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "603:5:25",
@@ -2033,16 +2033,16 @@
               "src": "542:79:25"
             },
             "returnParameters": {
-              "id": 4923,
+              "id": 4955,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4922,
+                  "id": 4954,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4929,
+                  "scope": 4961,
                   "src": "655:6:25",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2051,7 +2051,7 @@
                     "typeString": "bytes4"
                   },
                   "typeName": {
-                    "id": 4921,
+                    "id": 4953,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
                     "src": "655:6:25",
@@ -2065,14 +2065,14 @@
               ],
               "src": "654:8:25"
             },
-            "scope": 4930,
+            "scope": 4962,
             "src": "517:200:25",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 4931,
+        "scope": 4963,
         "src": "328:391:25"
       }
     ],
@@ -2084,7 +2084,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-18T07:59:15.580Z",
+  "updatedAt": "2022-01-03T10:49:23.574Z",
   "devdoc": {
     "details": "Implementation of the {IERC721Receiver} interface. Accepts all token transfers. Make sure the contract is able to use its token with {IERC721-safeTransferFrom}, {IERC721-approve} or {IERC721-setApprovalForAll}.",
     "kind": "dev",

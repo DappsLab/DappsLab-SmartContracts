@@ -4,7 +4,7 @@ const fs = require('fs');
 let DVC = fs.readFileSync("./build/contracts/DVC.json").toString().trim();
 DVC = JSON.parse(DVC);
 
-const provider=new HDWalletProvider('detect surround mercy wing invite session subway final fragile fade buyer century','http://64.225.91.151:8545');
+const provider = new HDWalletProvider('detect surround mercy wing invite session subway final fragile fade buyer century','http://64.225.91.151:8545');
 
 const web3 = new Web3(provider);
 

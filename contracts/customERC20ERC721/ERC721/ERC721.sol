@@ -10,7 +10,6 @@ import "../utils/Context.sol";
 import "../utils/Strings.sol";
 import "../utils/introspection/ERC165.sol";
 import "../ERC20/ERC20.sol";
-import "../Auction.sol";
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
@@ -30,9 +29,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Token symbol
     string private _symbol;
     address private ownership;
-    uint256 public _creatorCommission = 5;
-    uint256 public _platformCommission = 2;
-    address public  platformAddress;
     // Mapping from token ID to owner address
     mapping(uint256 => address) public _owners;
 
@@ -47,14 +43,12 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    mapping(uint256 => Auction) private _auctionContracts;
 
     //mapping of tokenId to sellPrices
     mapping(uint256 => uint256) public _sellPrice;
     mapping(uint256 => uint256) public _sellingNFTsIndexes;
     uint256[] public _sellingNFTs;
 
-    // Auction public auction;
     // Events that will be emitted on changes.
 
     /**
@@ -65,9 +59,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _symbol = symbol_;
         ownership = msg.sender;
     }
-    function getCreatorCommission() public view returns(uint256){
-        return _creatorCommission;
-    }
+
     function getSellingNFTs() public view returns(uint256[] memory){
         return _sellingNFTs;
     }
@@ -95,12 +87,8 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(msg.sender != _owners[tokenId],"Owner cannot buy it's own NFT");
         require(_token.balanceOf(msg.sender) >= _sellPrice[tokenId],"Low balance");
         require(_token.spendFrom(msg.sender, _sellPrice[tokenId]),"Token Transection Failed");
-        uint256 commission = (_sellPrice[tokenId] * _creatorCommission) / 100 ;
-        _token.transfer(_creator[tokenId], commission);
-        uint256 platform = (_sellPrice[tokenId] * _platformCommission) / 100 ;
-        _token.transfer(_creator[tokenId], platform);
-        uint256 total = commission + platform;
-        _token.transfer(_owners[tokenId], (_sellPrice[tokenId] - total));
+
+        _token.transfer(_owners[tokenId], (_sellPrice[tokenId]));
         _balances[_owners[tokenId]] -= 1;
         _balances[msg.sender] += 1;
         _owners[tokenId] = msg.sender;
@@ -109,16 +97,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         delete _sellPrice[tokenId];
         return true;
     }
-    function getCreator(uint256 tokenId) public view returns (address){
-        return _creator[tokenId];
-    }
-    function getPlatformCommission() public view returns (uint256){
-        return _platformCommission;
-    }
-    function setPlatformAdddress(address addr)public  {
-        require(msg.sender == ownership, "can be called by Contract Owner");
-        platformAddress  = addr;
-    }
+
 
     function getSellPrice(uint256 tokenId) public view returns(uint256){
         return _sellPrice[tokenId];
@@ -146,24 +125,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         _token = ERC20(tokenAddress);
     }
 
-    function startAuction(uint256 tokenId, uint time, uint256 minPrice) public {
-        require(msg.sender == _owners[tokenId], 'can only be called by Owner');
-        require(!(_sellPrice[tokenId] > 0), "Already Selling, cancel Selling NFT First");
-        address nftaddress = address(this);
-        _auctionContracts[tokenId] = new Auction(tokenId, time, _owners[tokenId], _token, nftaddress, minPrice);
-        safeTransferFrom(msg.sender, address(_auctionContracts[tokenId]), tokenId);
-        _token.setAuctionsAddress(tokenId, address(_auctionContracts[tokenId]));
-    }
-
-    function getAuctionContract(uint256 tokenId) public view returns (Auction){
-        return _auctionContracts[tokenId];
-    }
-
-
-    function deleteAuctionContract(uint256 tokenId) public {
-        require(msg.sender == address(_auctionContracts[tokenId]), "can only called by Auction/Owner");
-        delete _auctionContracts[tokenId];
-    }
     /**
      * @dev See {IERC165-supportsInterface}.
      */
