@@ -1,26 +1,45 @@
 import React, {useState} from 'react';
-const IPFS = require('ipfs-http-client');
-const ipfs = new IPFS({host:'127.0.0.1',port:8080,protocol:'https'});
+import {create} from 'ipfs-http-client'
+
+const ipfs = create('http://localhost:5001')
+console.log("ipfs", ipfs);
 
 export default function IPFSForm() {
+
+
     const [state, setState] = useState({});
-    function uploadToIpfs(){
+
+    async function uploadToIpfs() {
         //article content to ipfs as .txt file
-        let article = state.value;
-
-
+        // let article = state.value;
+        // const { cid } = await ipfs.add(article)
+        // await ipfs.files.mkdir('/destination-directory')
+        // let folderStatus = await ipfs.files.stat('/example')
+        // await ipfs.files.write('/example/article.txt',article,{ create: true })
+        // console.log('CID', cid);
+        // console.log('folderStatus', folderStatus);
+        let ls = await ipfs.files.ls('/example')
+        let read = await ipfs.files.read('/article')
+        // await ipfs.files.cp('/example/article.txt', '/destination-directory/article.txt', {parents: true})
+        console.log('all articles', ls);
+        console.log('read', read);
     }
-    function getFromIpfs(CID){
+
+    function getFromIpfs(CID) {
         //CID string
     }
-    function editArticle(CID){
+
+    function editArticle(CID) {
 
     }
-    return( <>
+
+    return (<>
         <input type="text"/>
-        <button >Get Article</button>
+        <button>Get Article</button>
         <div>
-            <textarea onChange={(e) => {setState({...state, ['value']: e.target.value});}}
+            <textarea onChange={(e) => {
+                setState({...state, ['value']: e.target.value});
+            }}
                       placeholder="CID"
                       value={state['value']}></textarea>
             <button onClick={uploadToIpfs}>upload</button>
