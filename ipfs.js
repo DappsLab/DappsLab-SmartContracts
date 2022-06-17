@@ -25,7 +25,7 @@ const system = (command = 'ls -la') => {
 //     const client = create()
 
 // connect to a different API
-    ipfs = IPFS.create("https://ipfs.infura.io:5001/api/v0")
+    let ipfs = IPFS.create("http://localhost:5001")
 //
 // // connect using a URL
 // //     const client = create(new URL('http://127.0.0.1:5002'))
