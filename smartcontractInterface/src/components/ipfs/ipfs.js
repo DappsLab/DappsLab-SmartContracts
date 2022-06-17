@@ -26,7 +26,9 @@ export default function IPFSForm() {
     // await ipfs.files.write(`/example/hello.txt`, "hello", {
     //   create: true,
     // })
-    await ipfs.files.write('/example/'+fileObj.name,fileObj,{ create: true })
+    await ipfs.files.write('/example/' + fileObj.name, fileObj, {
+      create: true,
+    })
     // 👇️ reset file input
     event.target.value = null
 
@@ -62,29 +64,50 @@ export default function IPFSForm() {
 
   return (
     <>
-      <input type="text" />
-      <button>Get Article</button>
-      <div>
-        <textarea
-          onChange={(e) => {
-            setState({ ...state, ['value']: e.target.value })
-          }}
-          placeholder="CID"
-          value={state['value']}
-        ></textarea>
-        <button onClick={uploadToIpfs}>upload</button>
-      </div>
-      <div>
-        <input
-          style={{ display: 'none' }}
-          ref={inputRef}
-          type="file"
-          onChange={handleFileChange}
-        />
+      <div className="flex flex-col bg-gray-100 rounded-md p-10 shadow-lg ">
+        <div className="my-3">
+          <input
+            type="text"
+            placeholder="Enter CID to get article"
+            className="h-12 w-96 rounded-md focus:outline-none p-3"
+          />
+          <button className="h-12 w-36 ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Get Article
+          </button>
+        </div>
 
-        <button onClick={handleClick}>Open file upload box</button>
+        <div className="my-3">
+          <textarea
+            onChange={(e) => {
+              setState({ ...state, ['value']: e.target.value })
+            }}
+            placeholder="Write content here!"
+            value={state['value']}
+            className="w-96 rounded-md h-40 focus:outline-none p-3"
+          ></textarea>
+          <button
+            onClick={uploadToIpfs}
+            className="h-12 w-36 ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            upload
+          </button>
+        </div>
+        <div className="flex my-3 justify-end">
+          <input
+            style={{ display: 'none' }}
+            ref={inputRef}
+            type="file"
+            onChange={handleFileChange}
+          />
+
+          <button
+            onClick={handleClick}
+            className="h-12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Open File to Upload to IPFS
+          </button>
+        </div>
       </div>
     </>
   )
 }
-
