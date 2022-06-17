@@ -25,46 +25,43 @@ export default function IPFSForm() {
       return
     }
 
-    // await ipfs.files.write(`/example/hello.txt`, "hello", {
-    //   create: true,
-    // })
-    await ipfs.files.write('/example/' + fileObj.name, fileObj, {
-      create: true,
-    })
-    // 👇️ reset file input
-    event.target.value = null
 
-    // await ipfs.files.write(`/example/hello.txt`, "hello", {
-    //   create: true,
-    // })
     await ipfs.files.write('/example/' + fileObj.name, fileObj, {
       create: true,
     })
+    const { cid } = await ipfs.add(fileObj)
+    let fileCID = cid._baseCache
+    console.log(fileCID[0])
+
+    setState({ fileCID })
     // 👇️ reset file input
-    event.target.value = null
 
     // 👇️ is now empty
-    console.log(event.target.files)
 
     // 👇️ can still access file object here
-    console.log(fileObj)
     console.log(fileObj.name)
   }
 
   async function uploadToIpfs() {
-    //article content to ipfs as .txt file
-    // let article = state.article;
-    // const { cid } = await ipfs.add(article)
     // await ipfs.files.mkdir('/destination-directory')
     // let folderStatus = await ipfs.files.stat('/example')
-    // await ipfs.files.write('/example/article.txt',article,{ create: true })
+
+    let article = state.article;
+    await ipfs.files.write('/example/article.txt',article,{ create: true })
+    const { cid } = await ipfs.add(article)
+
+    let articleCID = cid._baseCache
+    setState({ articleCID })
+    console.log(articleCID[0])
+
+
     // console.log('CID', cid);
     // console.log('folderStatus', folderStatus);
-    let ls = await ipfs.files.ls('/example')
-    let read = await ipfs.files.read('/article')
+    // let ls = await ipfs.files.ls('/example')
+    // let read = await ipfs.files.read('/article')
     // await ipfs.files.cp('/example/article.txt', '/destination-directory/article.txt', {parents: true})
-    console.log('all articles', ls)
-    console.log('read', read)
+    // console.log('all articles', ls)
+    // console.log('read', read)
   }
 
   function getFromIpfs(CID) {
@@ -90,10 +87,10 @@ export default function IPFSForm() {
           >
             Get Article
           </button>
-          <iframe src={state['cid']} className="w-full h-96 mt-5"></iframe>
+          {state['cid'] && <iframe src={state['cid']} className="w-full h-96 mt-5"></iframe>}
         </div>
 
-        <div className="flex flex-col items-end my-3">
+        <div className="flex flex-col items-start my-3">
           <textarea
             onChange={(e) => {
               setState({ ...state, ['article']: e.target.value })
@@ -104,12 +101,13 @@ export default function IPFSForm() {
           ></textarea>
           <button
             onClick={uploadToIpfs}
-            className="mt-5 h-12 w-36 ml-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-5 h-12 w-60 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            upload
+            upload content
           </button>
+          <p>{state['articleCID']}</p>
         </div>
-        <div className="flex my-3 justify-end">
+        <div className="flex my-3 justify-start">
           <input
             style={{ display: 'none' }}
             ref={inputRef}
@@ -123,6 +121,7 @@ export default function IPFSForm() {
           >
             Open File to Upload to IPFS
           </button>
+          <p>{state['fileCID']}</p>
         </div>
       </div>
     </>
