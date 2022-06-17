@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts v4.4.1 (token/ERC721/ERC721.sol)
+// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/ERC721.sol)
 
 pragma solidity ^0.8.0;
 
@@ -28,6 +28,11 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
+    mapping(uint256 => string) private _username;
+    mapping(uint256 => string) private _email;
+    mapping(uint256 => string[]) private _token_articlesList;
+    mapping(uint256 => uint256) private _token_articles_counter;
+    mapping(uint256 => mapping(uint256 => string)) private _articles;
 
     // Mapping owner address to token count
     mapping(address => uint256) private _balances;
@@ -72,6 +77,28 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(owner != address(0), "ERC721: owner query for nonexistent token");
         return owner;
     }
+    function emailOf(uint256 tokenId) public view returns (string memory) {
+        require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
+        return _email[tokenId];
+    }
+    function usernameOf(uint256 tokenId) public view returns (string memory) {
+        require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
+        return _username[tokenId];
+    }
+    function setArticle(uint256 tokenId, string memory CID) public {
+        require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
+        _token_articles_counter[tokenId] = _token_articles_counter[tokenId]+1;
+        _token_articlesList[tokenId].push(CID);
+        _articles[tokenId][_token_articles_counter[tokenId]] = CID;
+    }
+
+    function articlesOf(uint256 tokenId) public view returns(string[] memory){
+        return _token_articlesList[tokenId];
+    }
+
+    function asticleOfPassportByID(uint256 tokenId, uint256 articleID) public view returns(string memory){
+        return _articles[tokenId][articleID];
+    }
 
     /**
      * @dev See {IERC721Metadata-name}.
@@ -94,7 +121,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
         string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json")) : "";
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
     }
 
     /**
@@ -232,7 +259,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view virtual returns (bool) {
         require(_exists(tokenId), "ERC721: operator query for nonexistent token");
         address owner = ERC721.ownerOf(tokenId);
-        return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
+        return (spender == owner || isApprovedForAll(owner, spender) || getApproved(tokenId) == spender);
     }
 
     /**
@@ -245,8 +272,10 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _safeMint(address to, uint256 tokenId) internal virtual {
+    function _safeMint(address to, uint256 tokenId, string memory username_, string memory email_) public virtual {
         _safeMint(to, tokenId, "");
+        _email[tokenId] = email_;
+        _username[tokenId] = username_;
     }
 
     /**

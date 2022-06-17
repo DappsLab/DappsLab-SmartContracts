@@ -76,6 +76,13 @@ ERC721Pausable
      *
      * - the caller must have the `MINTER_ROLE`.
      */
+    function claimTo(address userWallet, uint256 quantity) public payable{
+        require(msg.value>=1000000000*quantity,"low balance");
+        require(quantity<=5,"max 5 tokens allowed at one time");
+        for(uint256 i=0; i <quantity;i++){
+            mint(msg.sender);
+        }
+    }
     function mint(address to) public virtual {
         require(hasRole(MINTER_ROLE, _msgSender()), "ERC721PresetMinterPauserAutoId: must have minter role to mint");
 
