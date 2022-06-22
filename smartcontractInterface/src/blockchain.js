@@ -1,6 +1,6 @@
 import { providers, utils, Contract } from 'ethers';
 import CONTRACT from './NFT.json';
-export const CONTRACT_ADDRESS = '0xFC621FB9920Ce8B5C7A3638c195358D1673FcE96';
+export const CONTRACT_ADDRESS = '0xfAf50bad71D61a8142573b8B74872E2aCd86B32B';
 // const provider = providers.getDefaultProvider('rinkeby');
 
 export const isMetaMaskInstalled = () => {

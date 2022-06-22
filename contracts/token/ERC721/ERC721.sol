@@ -10,6 +10,7 @@ import "../../utils/Address.sol";
 import "../../utils/Context.sol";
 import "../../utils/Strings.sol";
 import "../../utils/introspection/ERC165.sol";
+// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/ERC721.sol)
 
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
@@ -85,18 +86,24 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
         require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
         return _username[tokenId];
     }
-    function setArticle(uint256 tokenId, string memory CID) public {
+    function addArticle(uint256 tokenId, string memory CID) public {
         require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
-        _token_articles_counter[tokenId] = _token_articles_counter[tokenId]+1;
         _token_articlesList[tokenId].push(CID);
         _articles[tokenId][_token_articles_counter[tokenId]] = CID;
+        _token_articles_counter[tokenId] = _token_articles_counter[tokenId]+1;
+    }
+    function editArticle(uint256 tokenId,uint256 articleID, string memory CID) public {
+        require(_owners[tokenId] != address(0), "ERC721: nonexistent token");
+        require(_token_articles_counter[tokenId] >= articleID, "Article must be added before edition!");
+        _articles[tokenId][articleID] = CID;
+        _token_articlesList[tokenId][articleID] = CID;
     }
 
     function articlesOf(uint256 tokenId) public view returns(string[] memory){
         return _token_articlesList[tokenId];
     }
 
-    function asticleOfPassportByID(uint256 tokenId, uint256 articleID) public view returns(string memory){
+    function articleOfPassportByID(uint256 tokenId, uint256 articleID) public view returns(string memory){
         return _articles[tokenId][articleID];
     }
 
@@ -272,7 +279,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
      *
      * Emits a {Transfer} event.
      */
-    function _safeMint(address to, uint256 tokenId, string memory username_, string memory email_) public virtual {
+    function _safeMint(address to, uint256 tokenId, string memory username_, string memory email_) internal virtual {
         _safeMint(to, tokenId, "");
         _email[tokenId] = email_;
         _username[tokenId] = username_;
